@@ -30,6 +30,8 @@ def update_file_names(all_lowercase, standard_name):
         os.rename("../"+all_lowercase+"App/Db/NDPlugin___settings.req", "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+"_settings.req")
     if(os.path.exists("../"+all_lowercase+"App/Db/Makefile")):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../"+all_lowercase+"App/Db/Makefile")
+    if(os.path.exists("../"+all_lowercase+"App/Db/NDPlugin"+standard_name+".template")):
+        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+".template")
     if(os.path.exists("../docs/index.html")):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../docs/index.html")
 

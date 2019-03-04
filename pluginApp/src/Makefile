@@ -13,13 +13,13 @@ ifeq (vxWorks,$(findstring vxWorks, $(T_A)))
 	CODE_CXXFLAGS=
 endif
 
-DBD += NDPlugin___.dbd
+DBD += NDPluginPLUGINNAMESTANDARD.dbd
 
-INC += NDPlugin___.h
+INC += NDPluginPLUGINNAMESTANDARD.h
 
-LIBRARY_IOC += NDPlugin___
+LIBRARY_IOC += NDPluginPLUGINNAMESTANDARD
 
-NDPluginBar_SRCS += NDPlugin___.cpp
+NDPluginBar_SRCS += NDPluginPLUGINNAMESTANDARD.cpp
 
 include $(AREA_DETECTOR)/ADCore/ADApp/commonLibraryMakefile
 
