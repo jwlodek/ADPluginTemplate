@@ -10,8 +10,8 @@
  * 
  */
 
-#ifndef NDPlugin____H
-#define NDPlugin____H
+#ifndef NDPluginPLUGINNAMESTANDARDH
+#define NDPluginPLUGINNAMESTANDARDH
 
 //Define necessary includes here
 
@@ -21,23 +21,23 @@ using namespace std;
 #include "NDPluginDriver.h"
 
 //version numbers
-#define PLUGINNAME_VERSION      	0
-#define PLUGINNAME_REVISION     	0
-#define PLUGINNAME_MODIFICATION 	0
+#define PLUGINNAMEUPPER_VERSION      	0
+#define PLUGINNAMEUPPER_REVISION     	0
+#define PLUGINNAMEUPPER_MODIFICATION 	0
 
 
 
 // Define the PVStrings for all of your PV values here in the following format
-#define NDPlugin___PVNameString 	"PV_STRING" 		//asynOctet
+//#define NDPluginPLUGINNAMESTANDARDPVNameString 	"PV_STRING" 		//asynOctet
 
 
 // define all necessary structs and enums here
 
 
 /* class that does barcode readings */
-class NDPlugin___ : public NDPluginDriver {
+class NDPluginPLUGINNAMESTANDARD : public NDPluginDriver {
 	public:
-		NDPlugin___(const char *portName, int queueSize, int blockingCallbacks,
+		NDPluginPLUGINNAMESTANDARD(const char *portName, int queueSize, int blockingCallbacks,
 			const char* NDArrayPort, int NDArrayAddr, int maxBuffers,
 			size_t maxMemory, int priority, int stackSize);
 
@@ -52,8 +52,8 @@ class NDPlugin___ : public NDPluginDriver {
 		//in this section i define the coords of database vals
 
 		//Place PV indexes here, define first and last as appropriate, replace PLUGINNAME with name, 
-		#define ND_PLUGINNAME_FIRST_PARAM	FIRSTPVINDEX
-		#define ND_PLUGINNAME_LAST_PARAM LASTPVINDEX
+		#define ND_PLUGINNAMEUPPER_FIRST_PARAM	FIRSTPVINDEX
+		#define ND_PLUGINNAMEUPPER_LAST_PARAM LASTPVINDEX
 
 	private:
 
@@ -64,6 +64,6 @@ class NDPlugin___ : public NDPluginDriver {
 };
 
 // Replace PLUGINNAME with plugin name ex. BAR
-#define NUM_PLUGINNAME_PARAMS ((int)(&ND_PLUGINNAME_LAST_PARAM - &ND_PLUGNINAME_FIRST_PARAM + 1))
+#define NUM_PLUGINNAMEUPPER_PARAMS ((int)(&ND_PLUGINNAMEUPPER_LAST_PARAM - &ND_PLUGNINAMEUPPER_FIRST_PARAM + 1))
 
 #endif

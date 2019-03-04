@@ -17,9 +17,9 @@ include "NDPluginBase.template"
 # Consult other .template files for guides on how to write specific PVs
 #
 # The PV_NAME at the end of the INP or OUT field of the record is the 
-# PVString defined in NDPlugin___.h.
+# PVString defined in NDPluginPLUGINNAMESTANDARD.h.
 #
-# example: #define NDPlugin___PVNameString "PV_NAME"
+# example: #define NDPluginPLUGINNAMESTANDARDPVNameString "PV_NAME"
 #
 ##################################################################
 

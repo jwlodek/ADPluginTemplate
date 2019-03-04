@@ -24,7 +24,7 @@
 #include <iocsh.h>
 #include "NDArray.h"
 // Include your plugin's header file here
-#include "NDPlugin___.h"
+#include "NDPluginPLUGINNAMESTANDARD.h"
 #include <epicsExport.h>
 
 // include your external dependency libraries here
@@ -35,7 +35,7 @@ using namespace std;
 
 
 // Name your plugin
-static const char *pluginName="NDPlugin___";
+static const char *pluginName="NDPluginPLUGINNAMESTANDARD";
 
 
 
@@ -46,7 +46,7 @@ static const char *pluginName="NDPlugin___";
  * @params[in]: value		-> value PV was set to
  * @return: success if PV was updated correctly, otherwise error
  */
-asynStatus NDPlugin___::writeInt32(asynUser* pasynUser, epicsInt32 value){
+asynStatus NDPluginPLUGINNAMESTANDARD::writeInt32(asynUser* pasynUser, epicsInt32 value){
 	const char* functionName = "writeInt32";
 	int function = pasynUser->reason;
 	asynStatus status = asynSuccess;
@@ -55,7 +55,7 @@ asynStatus NDPlugin___::writeInt32(asynUser* pasynUser, epicsInt32 value){
 	asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s::%s function = %d value=%d\n", pluginName, functionName, function, value);
 
     // replace PLUGINNAME with your plugin (ex. BAR)
-	if(function < ND_PLUGINNAME_FIRST_PARAM){
+	if(function < ND_PLUGINNAMEUPPER_FIRST_PARAM){
 		status = NDPluginDriver::writeInt32(pasynUser, value);
 	}
 	callParamCallbacks();
@@ -73,7 +73,7 @@ asynStatus NDPlugin___::writeInt32(asynUser* pasynUser, epicsInt32 value){
  * @params[in]: pArray -> NDArray recieved by the plugin from the camera
  * @return: void
 */
-void NDPlugin___::processCallbacks(NDArray *pArray){
+void NDPluginPLUGINNAMESTANDARD::processCallbacks(NDArray *pArray){
 	static const char* functionName = "processCallbacks";
 	NDArray *pScratch;
 	asynStatus status = asynSuccess;
@@ -106,7 +106,7 @@ void NDPlugin___::processCallbacks(NDArray *pArray){
 
 
 //constructror from base class, replace with your plugin name
-NDPlugin___::NDPlugin___(const char *portName, int queueSize, int blockingCallbacks,
+NDPluginPLUGINNAMESTANDARD::NDPluginPLUGINNAMESTANDARD(const char *portName, int queueSize, int blockingCallbacks,
 		const char *NDArrayPort, int NDArrayAddr,
 		int maxBuffers, size_t maxMemory,
 		int priority, int stackSize)
@@ -127,9 +127,9 @@ NDPlugin___::NDPlugin___(const char *portName, int queueSize, int blockingCallba
     // createParam(PVString, 	asynParamFloat64, 	&PVIndex);  -> float records
 
     // replace plugin name
-	setStringParam(NDPluginDriverPluginType, "NDPlugin___");
+	setStringParam(NDPluginDriverPluginType, "NDPluginPLUGINNAMESTANDARD");
     // replace PLUGINNAME with name of plugin ex. BAR used for version numbers in .h file
-	epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", PLUGINNAME_VERSION, PLUGINNAME_REVISION, PLUGINNAME_MODIFICATION);
+	epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", PLUGINNAMEUPPER_VERSION, PLUGINNAMEUPPER_REVISION, PLUGINNAMEUPPER_MODIFICATION);
 	setStringParam(NDDriverVersion, versionString);
 	connectToArrayPort();
 }
@@ -143,12 +143,12 @@ NDPlugin___::NDPlugin___(const char *portName, int queueSize, int blockingCallba
  * 
  * @params[in]	-> all passed to constructor
  */
-extern "C" int ND___Configure(const char *portName, int queueSize, int blockingCallbacks,
+extern "C" int NDPLUGINNAMESTANDARDConfigure(const char *portName, int queueSize, int blockingCallbacks,
 		const char *NDArrayPort, int NDArrayAddr,
 		int maxBuffers, size_t maxMemory,
 		int priority, int stackSize){
 
-	NDPlugin___ *pPlugin = new NDPlugin___(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
+	NDPluginPLUGINNAMESTANDARD *pPlugin = new NDPluginPLUGINNAMESTANDARD(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
 		maxBuffers, maxMemory, priority, stackSize);
 	return pPlugin->start();
 }
@@ -176,13 +176,13 @@ static const iocshArg * const initArgs[] = {&initArg0,
 
 
 // Define the path to your plugin's extern configure function above
-static const iocshFuncDef initFuncDef = {"ND___Configure",9,initArgs};
+static const iocshFuncDef initFuncDef = {"NDPLUGINNAMESTANDARDConfigure",9,initArgs};
 
 
 /* link the configure function with the passed args, and call it from the IOC shell */
 /* Replace ND___ with your plugin's configure function */
 static void initCallFunc(const iocshArgBuf *args){
-	ND___Configure(args[0].sval, args[1].ival, args[2].ival,
+	NDPLUGINNAMESTANDARDConfigure(args[0].sval, args[1].ival, args[2].ival,
 			args[3].sval, args[4].ival, args[5].ival,
 			args[6].ival, args[7].ival, args[8].ival);
 }
@@ -190,7 +190,7 @@ static void initCallFunc(const iocshArgBuf *args){
 
 /* function to register the configure function in the IOC shell */
 /* replace with your plugin name */
-extern "C" void ND___Register(void){
+extern "C" void NDPLUGINNAMESTANDARDRegister(void){
 	iocshRegister(&initFuncDef,initCallFunc);
 }
 
@@ -198,5 +198,5 @@ extern "C" void ND___Register(void){
 /* Exports plugin registration */
 /* replace with your plugin's register function above */
 extern "C" {
-	epicsExportRegistrar(ND___Register);
+	epicsExportRegistrar(NDPLUGINNAMESTANDARDRegister);
 }

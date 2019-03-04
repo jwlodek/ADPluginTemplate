@@ -8,7 +8,7 @@ include $(TOP)/configure/CONFIG
 #optimization of db files using dbst(DEFAULT:NO)
 #DB_OPT=YES
 
-DB+=NDPlugin___.template
+DB+=NDPluginPLUGINNAMESTANDARD.template
 
 
 include $(TOP)/configure/RULES
