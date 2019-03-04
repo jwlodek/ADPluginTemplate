@@ -26,7 +26,7 @@ PluginName="${1,,}"
 PluginName="${PluginName^}"
 
 touch README.md
-echo "#$PluginName" >> README.md
+echo "# ADPlugin$PluginName" >> README.md
 
 git init
 git add -A
