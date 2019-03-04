@@ -30,6 +30,8 @@ def update_file_names(all_lowercase, standard_name):
         os.rename("../"+all_lowercase+"App/Db/NDPlugin___settings.req", "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+"_settings.req")
     if(os.path.exists("../"+all_lowercase+"App/Db/Makefile")):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../"+all_lowercase+"App/Db/Makefile")
+    if(os.path.exists("../docs/index.html")):
+        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../docs/index.html")
 
 
 # Reads file line by line and updates specific locations with correct plugin name
@@ -40,10 +42,12 @@ def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
 
     line = oldFile.readline()
     while(line):
-        if "___" in line:
-            line = line.replace("___", standard_name)
-        elif "PLUGINNAME" in line:
-            line = line.replace("PLUGINNAME", all_uppercase)
+        if "PLUGINNAMESTANDARD" in line:
+            line = line.replace("PLUGINNAMESTANDARD", standard_name)
+        elif "PLUGINNAMEUPPER" in line:
+            line = line.replace("PLUGINNAMEUPPER", all_uppercase)
+        elif "PLUGINNAMELOWER" in line:
+            line = line.replace("PLUGINNAMELOWER", all_lowercase)
         newFile.write(line)
         line = oldFile.readline()
 

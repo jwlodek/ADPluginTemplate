@@ -12,18 +12,24 @@ echo "------------------------------------"
 echo "Updating ADPluginTemplate with name:"
 echo $1
 
-python3 update_names.py -n $1
+python3 update_name.py -n $1
 
 cd ..
 
 echo "update_names.py" >> .gitignore
 echo "initializePlugin.sh" >> .gitignore
+echo "TemplateReadme.md" >> .gitignore
 
-git init
-git add -A
+mv README.md TemplateReadme.md
 
 PluginName="${1,,}"
 PluginName="${PluginName^}"
+
+touch README.md
+echo "#$PluginName" >> README.md
+
+git init
+git add -A
 
 git commit -m "Initial Commit for ADPlugin$PluginName"
 
