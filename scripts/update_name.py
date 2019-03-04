@@ -16,17 +16,17 @@ def update_dir_names(all_lowercase):
         os.rename("../pluginApp", "../"+all_lowercase+"App")
 
 
-def update_file_names(standard_name):
-    if os.path.exists("../pluginApp/src/NDPlugin___.cpp"):
-        os.rename("../pluginApp/src/NDPlugin___.cpp", "../pluginApp/src/NDPlugin"+standard_name+".cpp")
-    if os.path.exists("../pluginApp/src/NDPlugin___.h"):
-        os.rename("../pluginApp/src/NDPlugin___.h", "../pluginApp/src/NDPlugin"+standard_name+".h")
-    if os.path.exists("../pluginApp/src/NDPlugin___.dbd"):
-        os.rename("../pluginApp/src/NDPlugin___.dbd", "../pluginApp/src/NDPlugin"+standard_name+".dbd")
-    if os.path.exists("../pluginApp/Db/NDPlugin___.template"):
-        os.rename("../pluginApp/Db/NDPlugin___.template", "../pluginApp/Db/NDPlugin"+standard_name+".template")
-    if os.path.exists("../pluginApp/Db/NDPlugin___settings.req"):
-        os.rename("../pluginApp/Db/NDPlugin___settings.req", "../pluginApp/Db/NDPlugin"+standard_name+"_settins.req")
+def update_file_names(all_lowercase, standard_name):
+    if os.path.exists("../"+all_lowercase+"App/src/NDPlugin___.cpp"):
+        os.rename("../"+all_lowercase+"App/src/NDPlugin___.cpp", "../"+all_lowercase+"App/src/NDPlugin"+standard_name+".cpp")
+    if os.path.exists("../"+all_lowercase+"App/src/NDPlugin___.h"):
+        os.rename("../"+all_lowercase+"App/src/NDPlugin___.h", "../"+all_lowercase+"App/src/NDPlugin"+standard_name+".h")
+    if os.path.exists("../"+all_lowercase+"App/src/NDPlugin___.dbd"):
+        os.rename("../"+all_lowercase+"App/src/NDPlugin___.dbd", "../"+all_lowercase+"App/src/NDPlugin"+standard_name+".dbd")
+    if os.path.exists("../"+all_lowercase+"App/Db/NDPlugin___.template"):
+        os.rename("../"+all_lowercase+"App/Db/NDPlugin___.template", "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+".template")
+    if os.path.exists("../"+all_lowercase+"App/Db/NDPlugin___settings.req"):
+        os.rename("../"+all_lowercase+"App/Db/NDPlugin___settings.req", "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+"_settins.req")
 
 
 def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
@@ -70,7 +70,7 @@ def parse_args():
         standard_name = all_lowercase.capitalize()
 
         update_dir_names(all_lowercase)
-        update_file_names(standard_name)
+        update_file_names(all_lowercase, standard_name)
         update_sources(all_lowercase, all_uppercase, standard_name)
 
     else:
