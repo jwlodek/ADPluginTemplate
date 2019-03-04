@@ -32,7 +32,7 @@ def update_file_names(all_lowercase, standard_name):
 def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
     os.rename(file_path, file_path+"_OLD")
     oldFile = open(file_path+"_OLD", "r")
-    newFile = open(file_path, "r")
+    newFile = open(file_path, "w")
 
     line = oldFile.readline()
     while(line):
