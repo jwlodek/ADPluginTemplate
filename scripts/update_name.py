@@ -57,6 +57,8 @@ def update_sources(all_lowercase, all_uppercase, standard_name):
                 update_source_file(all_lowercase, all_uppercase, standard_name, src_dir + "/" + file)
 
 
+def update_root_dir(standard_name):
+    os.rename("../../ADPluginTemplate", "../../ADPlugin"+standard_name)
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Update plugin names in template")
@@ -72,6 +74,7 @@ def parse_args():
         update_dir_names(all_lowercase)
         update_file_names(all_lowercase, standard_name)
         update_sources(all_lowercase, all_uppercase, standard_name)
+        update_root_dir()
 
     else:
         print("Error, no plugin name specified")
@@ -79,4 +82,6 @@ def parse_args():
 
     
 
-parse_args()
+#parse_args()
+
+update_root_dir("Dmtx")
