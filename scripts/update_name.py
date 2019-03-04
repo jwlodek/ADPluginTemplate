@@ -11,11 +11,12 @@ import os
 import argparse
 
 
+# Updates the name of the main plugin directory
 def update_dir_names(all_lowercase):
     if os.path.exists("../pluginApp"):
         os.rename("../pluginApp", "../"+all_lowercase+"App")
 
-
+# Updates the filenames of all of the plugin specific files. Also updates the contents of all files that are not in the src dir
 def update_file_names(all_lowercase, standard_name):
     if os.path.exists("../"+all_lowercase+"App/src/NDPlugin___.cpp"):
         os.rename("../"+all_lowercase+"App/src/NDPlugin___.cpp", "../"+all_lowercase+"App/src/NDPlugin"+standard_name+".cpp")
@@ -27,8 +28,11 @@ def update_file_names(all_lowercase, standard_name):
         os.rename("../"+all_lowercase+"App/Db/NDPlugin___.template", "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+".template")
     if os.path.exists("../"+all_lowercase+"App/Db/NDPlugin___settings.req"):
         os.rename("../"+all_lowercase+"App/Db/NDPlugin___settings.req", "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+"_settins.req")
+    if(os.path.exists("../"+all_lowercase+"App/Db/Makefile")):
+        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../"+all_lowercase+"App/Db/Makefile")
 
 
+# Reads file line by line and updates specific locations with correct plugin name
 def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
     os.rename(file_path, file_path+"_OLD")
     oldFile = open(file_path+"_OLD", "r")
@@ -48,7 +52,7 @@ def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
     os.remove(file_path+"_OLD")
 
 
-
+# Updates all of the files located in the src dir
 def update_sources(all_lowercase, all_uppercase, standard_name):
     if os.path.exists("../"+all_lowercase+"App/src"):
         src_dir = "../"+all_lowercase+"App/src"
@@ -57,9 +61,12 @@ def update_sources(all_lowercase, all_uppercase, standard_name):
                 update_source_file(all_lowercase, all_uppercase, standard_name, src_dir + "/" + file)
 
 
+# Renames the plugin root directory to reflect the new plugin name
 def update_root_dir(standard_name):
     os.rename("../../ADPluginTemplate", "../../ADPlugin"+standard_name)
 
+
+# Parses name from user args in command line
 def parse_args():
     parser = argparse.ArgumentParser(description="Update plugin names in template")
     parser.add_argument('-n', '--name', help = 'Name of the plugin')
@@ -80,4 +87,5 @@ def parse_args():
         print("Error, no plugin name specified")
 
 
+# calls other functions
 parse_args()
