@@ -14,7 +14,7 @@ pvtypes = [['binary', 'bo', 'bi'], ['multibit', 'mbbo', 'mbbi'], ['analog', 'ao'
 path_to_template = "../PLUGINNAMELOWERApp/Db/NDPluginPLUGINNAMESTANDARD.template"
 path_to_header = "../PLUGINNAMELOWERApp/src/NDPluginPLUGINNAMESTANDARD.h"
 path_to_source = "../PLUGINNAMELOWERApp/src/NDPluginPLUGINNAMESTANDARD.cpp"
-name_of_driver = "PLUGINNAMESTANDARD"
+name_of_driver = "ADPluginPLUGINNAMESTANDARD"
 
 def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
     os.rename(path_to_header, path_to_header+"_OLD")
