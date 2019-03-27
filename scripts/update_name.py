@@ -35,7 +35,7 @@ def update_file_names(all_lowercase, standard_name):
     if(os.path.exists("../docs/index.html")):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../docs/index.html")
     if(os.path.exists("../RELEASE.md")):
-        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../README.md")
+        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../RELEASE.md")
 
 
 # Reads file line by line and updates specific locations with correct plugin name
@@ -71,7 +71,11 @@ def update_sources(all_lowercase, all_uppercase, standard_name):
 
 # Renames the plugin root directory to reflect the new plugin name
 def update_root_dir(standard_name):
-    os.rename("../../ADPluginTemplate", "../../ADPlugin"+standard_name)
+    for directory_name in os.listdir("../.."):
+        if "ADPluginTemplate" in directory_name:
+            os.rename("../../"+directory_name, "../../ADPlugin"+standard_name)
+
+
 
 
 # Parses name from user args in command line

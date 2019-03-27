@@ -16,8 +16,8 @@ python3 update_name.py -n $1
 
 cd ..
 
-echo "update_names.py" >> .gitignore
-echo "initializePlugin.sh" >> .gitignore
+echo "" >> .gitignore
+echo "scripts/" >> .gitignore
 echo "TemplateReadme.md" >> .gitignore
 
 mv README.md TemplateReadme.md
