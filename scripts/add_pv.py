@@ -14,7 +14,7 @@ pvtypes = [['binary', 'bo', 'bi'], ['multibit', 'mbbo', 'mbbi'], ['analog', 'ao'
 path_to_template = "../PLUGINNAMELOWERApp/Db/NDPluginPLUGINNAMESTANDARD.template"
 path_to_header = "../PLUGINNAMELOWERApp/src/NDPluginPLUGINNAMESTANDARD.h"
 path_to_source = "../PLUGINNAMELOWERApp/src/NDPluginPLUGINNAMESTANDARD.cpp"
-name_of_driver = "ADPluginPLUGINNAMESTANDARD"
+name_of_driver = "NDPluginPLUGINNAMESTANDARD"
 
 def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
     os.rename(path_to_header, path_to_header+"_OLD")
@@ -29,18 +29,18 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
         if "MODIFICATION" in line:
             header_file.write(line)
             header_file.write("\n\n")
-            header_file.write("#define "+driver_name+pv_base_name+"String \t\t\t"+pv_string+"\t\tasynParam"+dtype)
+            header_file.write("#define "+driver_name+pv_base_name+"String "+pv_string+" //asynParam"+dtype+"\n")
         elif "FIRST_PARAM" in line:
             if first_pv == True:
-                header_file.write("int "+driver_name+pv_base_name+";")
+                header_file.write("int "+driver_name+pv_base_name+";\n")
                 line = line.split(' ')
-                header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name)
+                header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name+"\n")
             else:
                 header_file.write(line)
         elif "LAST_PARAM" in line:
-            header_file.write("int " + driver_name+pv_base_name+";")
+            header_file.write("int " + driver_name+pv_base_name+";\n")
             line = line.split(' ')
-            header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name)
+            header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name+"\n")
         else:
             header_file.write(line)
         line = header_file_old.readline()
@@ -53,18 +53,17 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
             source_file.write(line_src)
         elif "{" in line_src and isConstructor:
             source_file.write(line_src)
-            source_file.write("\n\n")
-            source_file.write("createParam("+driver_name+pv_base_name+"String,\t\t\tasynParam"+dtype+",\t\t&"+driver_name+pv_base_name+");")
+            source_file.write("createParam("+driver_name+pv_base_name+"String, asynParam"+dtype+", &"+driver_name+pv_base_name+");\n")
             isConstructor = False
         else:
             source_file.write(line_src)
         line_src = source_file_old.readline()
-    close(header_file_old)
-    close(source_file_old)
+    header_file_old.close()
+    source_file_old.close()
     os.remove(path_to_header+"_OLD")
     os.remove(path_to_source+"_OLD")
-    close(header_file)
-    close(source_file)
+    header_file.close()
+    source_file.close()
 
 
 
@@ -72,8 +71,7 @@ def parse_pv_string(pv_string):
     parts = pv_string.split('_')
     pv_base_name = ""
     for i in range(0, len(parts)):
-        temp = parts[i].lower()
-        temp[0].upper()
+        temp = parts[i].lower().capitalize()
         pv_base_name += temp
     pv_readback_name = pv_base_name+"_RBV"
     return pv_base_name, pv_readback_name
@@ -84,19 +82,19 @@ def write_pv_waveform(pv_string):
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
     template_file = open(path_to_template, "a+")
     template_file.write("\n\n")
-    template_file.write('record(waveform, "$(P)$(R)'+pv_base_name+'"){')
-    template_file.write('\tfield(DTYP, "asynOctetWrite")')
-    template_file.write('\tfield(OUT, "@asyn($(PORT),$(ADDR), $(TIMEOUT))'+pv_string+'")')
-    template_file.write('\tfield(FTVL, "CHAR")')
-    template_file.write('\tfield(NELM, "256")')
-    template_file.write('\tinfo(autosaveFields, "VAL")')
-    template_file.write('}\n')
-    template_file.write('record(waveform, "$(P)$(R)'+pv_readback_name+'"){')
-    template_file.write('\tfield(DTYP, "asynOctetRead")')
-    template_file.write('\tfield(INP, "@asyn($(PORT),$(ADDR), $(TIMEOUT))'+pv_string+'")')
-    template_file.write('\tfield(FTVL, "CHAR")')
-    template_file.write('\tfield(NELM, "256")')
-    template_file.write('\tfield(SCAN, "I/O Intr")')
+    template_file.write('record(waveform, "$(P)$(R)'+pv_base_name+'"){\n')
+    template_file.write('   field(DTYP, "asynOctetWrite")\n')
+    template_file.write('   field(OUT, "@asyn($(PORT),$(ADDR), $(TIMEOUT))'+pv_string+'")\n')
+    template_file.write('   field(FTVL, "CHAR")\n')
+    template_file.write('   field(NELM, "256")\n')
+    template_file.write('   info(autosaveFields, "VAL")\n')
+    template_file.write('}\n\n')
+    template_file.write('record(waveform, "$(P)$(R)'+pv_readback_name+'"){\n')
+    template_file.write('   field(DTYP, "asynOctetRead")\n')
+    template_file.write('   field(INP, "@asyn($(PORT),$(ADDR), $(TIMEOUT))'+pv_string+'")\n')
+    template_file.write('   field(FTVL, "CHAR")\n')
+    template_file.write('   field(NELM, "256")\n')
+    template_file.write('   field(SCAN, "I/O Intr")\n')
     template_file.write('}\n')
 
 
@@ -105,34 +103,34 @@ def write_pv_basic(pv_string, pv_type, dtype):
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
     template_file = open(path_to_template, "a+")
     template_file.write("\n\n")
-    template_file.write('record('+pv_type+', "$(P)$(R)'+pv_base_name+'"){')
-    template_file.write('\tfield(DTYP, "asyn'+dtype+'")')
-    template_file.write('\tfield(OUT, "@asyn($(PORT),$(ADDR), $(TIMEOUT))'+pv_string+'")')
-    template_file.write('\tfield(VAL, "0")')
-    template_file.write('\tinfo(autosaveFields, "VAL")')
-    template_file.write('}\n')
-    template_file.write('record('+pv_type+', "$(P)$(R)'+pv_readback_name+'"){')
-    template_file.write('\tfield(DTYP, "asyn'+dtype+'")')
-    template_file.write('\tfield(INP, "@asyn($(PORT),$(ADDR), $(TIMEOUT))'+pv_string+'")')
-    template_file.write('\tfield(VAL, "0")')
-    template_file.write('\tfield(SCAN, "I/O Intr")')
+    template_file.write('record('+pv_type[1]+', "$(P)$(R)'+pv_base_name+'"){\n')
+    template_file.write('    field(DTYP, "asyn'+dtype+'")\n')
+    template_file.write('    field(OUT, "@asyn($(PORT),$(ADDR), $(TIMEOUT))'+pv_string+'")\n')
+    template_file.write('    field(VAL, "0")\n')
+    template_file.write('    info(autosaveFields, "VAL")\n')
+    template_file.write('}\n\n')
+    template_file.write('record('+pv_type[2]+', "$(P)$(R)'+pv_readback_name+'"){\n')
+    template_file.write('    field(DTYP, "asyn'+dtype+'")\n')
+    template_file.write('    field(INP, "@asyn($(PORT),$(ADDR), $(TIMEOUT))'+pv_string+'")\n')
+    template_file.write('    field(VAL, "0")\n')
+    template_file.write('    field(SCAN, "I/O Intr")\n')
     template_file.write('}\n')
 
 
-def check_valid_dform(data-format):
+def check_valid_dform(data_format):
     for dform in datatypes:
-        if data-format==dform:
+        if data_format==dform:
             return True
     return False
 
 def check_valid_type(pv_type):
-    for ptype in pv_types:
+    for ptype in pvtypes:
         if ptype[0] == pv_type:
             return True
     return False
 
 def get_type(pv_type):
-    for ptype in pv_types:
+    for ptype in pvtypes:
         if ptype[0] == pv_type:
             return ptype
 
@@ -149,15 +147,15 @@ def parse_args():
     if arguments["type"] is None:
         print("No type specified, pv not being added")
         return
-    if arguments["data-format"] is None:
+    if arguments["data_format"] is None:
         print("No data format specified, pv not being added")
         return
-    if check_valid_type(arguments["type"]) == False or check_valid_dform(arguments["data-format"]) == False:
+    if check_valid_type(arguments["type"]) == False or check_valid_dform(arguments["data_format"]) == False:
         print("Illegal value for data format or type")
         return
     pv_string = arguments["name"]
     pv_type = get_type(arguments["type"])
-    data_format = arguments["data-format"]
+    data_format = arguments["data_format"]
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
     if(pv_type == "waveform"):
         write_pv_waveform(pv_string)
