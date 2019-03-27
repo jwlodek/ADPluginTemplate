@@ -36,7 +36,8 @@ def update_file_names(all_lowercase, standard_name):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../docs/index.html")
     if(os.path.exists("../RELEASE.md")):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../RELEASE.md")
-
+    if(os.path.exists("add_pv.py")):
+        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "add_pv.py")
 
 # Reads file line by line and updates specific locations with correct plugin name
 def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):

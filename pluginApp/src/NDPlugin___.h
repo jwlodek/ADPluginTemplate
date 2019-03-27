@@ -1,9 +1,6 @@
 /**
  * Template header file fo NDPlugins
  * 
- * Replace all instances of ___ with your plugin name in the form 'Bar'
- * 
- * Replace all instances of PLUGINNAME with the name of your plugin in the format 'BAR'
  * 
  * Author: 
  * Created on: 
@@ -34,7 +31,7 @@ using namespace std;
 // define all necessary structs and enums here
 
 
-/* class that does barcode readings */
+/* Plugin class, extends plugin driver */
 class NDPluginPLUGINNAMESTANDARD : public NDPluginDriver {
 	public:
 		NDPluginPLUGINNAMESTANDARD(const char *portName, int queueSize, int blockingCallbacks,

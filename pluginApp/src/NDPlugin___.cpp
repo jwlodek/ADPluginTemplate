@@ -91,6 +91,7 @@ void NDPluginPLUGINNAMESTANDARD::processCallbacks(NDArray *pArray){
 	// Process your image here.
     // Access data with pArray->pData
     // DO NOT CALL pArray.release()
+	// If used, call pScratch.release()
     // use doCallbacksGenericPointer with pScratch to pass processed image to plugin array port
 
 	this->lock();
@@ -126,9 +127,7 @@ NDPluginPLUGINNAMESTANDARD::NDPluginPLUGINNAMESTANDARD(const char *portName, int
     // createParam(PVString, 	asynParamInt32, 	&PVIndex);  -> int records
     // createParam(PVString, 	asynParamFloat64, 	&PVIndex);  -> float records
 
-    // replace plugin name
 	setStringParam(NDPluginDriverPluginType, "NDPluginPLUGINNAMESTANDARD");
-    // replace PLUGINNAME with name of plugin ex. BAR used for version numbers in .h file
 	epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", PLUGINNAMEUPPER_VERSION, PLUGINNAMEUPPER_REVISION, PLUGINNAMEUPPER_MODIFICATION);
 	setStringParam(NDDriverVersion, versionString);
 	connectToArrayPort();
@@ -139,7 +138,6 @@ NDPluginPLUGINNAMESTANDARD::NDPluginPLUGINNAMESTANDARD(const char *portName, int
 /**
  * External configure function. This will be called from the IOC shell of the
  * detector the plugin is attached to, and will create an instance of the plugin and start it
- * Replace with your plugin name
  * 
  * @params[in]	-> all passed to constructor
  */
@@ -180,7 +178,6 @@ static const iocshFuncDef initFuncDef = {"NDPLUGINNAMESTANDARDConfigure",9,initA
 
 
 /* link the configure function with the passed args, and call it from the IOC shell */
-/* Replace ND___ with your plugin's configure function */
 static void initCallFunc(const iocshArgBuf *args){
 	NDPLUGINNAMESTANDARDConfigure(args[0].sval, args[1].ival, args[2].ival,
 			args[3].sval, args[4].ival, args[5].ival,
@@ -189,14 +186,12 @@ static void initCallFunc(const iocshArgBuf *args){
 
 
 /* function to register the configure function in the IOC shell */
-/* replace with your plugin name */
 extern "C" void NDPLUGINNAMESTANDARDRegister(void){
 	iocshRegister(&initFuncDef,initCallFunc);
 }
 
 
 /* Exports plugin registration */
-/* replace with your plugin's register function above */
 extern "C" {
 	epicsExportRegistrar(NDPLUGINNAMESTANDARDRegister);
 }
