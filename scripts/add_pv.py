@@ -29,6 +29,8 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
     header_file = open(path_to_header, "w+")
     source_file = open(path_to_source, "w+")
 
+    pvIndexWritten = False
+
     line = header_file_old.readline()
     while line:
         if "MODIFICATION" in line:
@@ -36,18 +38,20 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
             header_file.write("\n\n")
             header_file.write("#define "+driver_name+pv_base_name+"String "+'"'+pv_string+'"'+" //asynParam"+dtype+"\n")
         elif "FIRST_PARAM" in line:
-            if first_pv == True:
+            if first_pv == True and not pvIndexWritten:
                 header_file.write("int "+driver_name+pv_base_name+";\n")
                 line = line.strip()
                 line = line.split(' ')
                 header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name+"\n")
+                pvIndexWritten = True
             else:
                 header_file.write(line)
-        elif "LAST_PARAM" in line and first_pv == False:
+        elif "LAST_PARAM" in line and first_pv == False and not pvIndexWritten:
             header_file.write("int " + driver_name+pv_base_name+";\n")
             line = line.strip()
             line = line.split(' ')
             header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name+"\n")
+            pvIndexWritten = True
         else:
             header_file.write(line)
         line = header_file_old.readline()

@@ -49,7 +49,7 @@ class NDPluginPLUGINNAMESTANDARD : public NDPluginDriver {
 		//in this section i define the coords of database vals
 
 		//Place PV indexes here, define first and last as appropriate, replace PLUGINNAME with name, 
-		#define ND_PLUGINNAMEUPPER_FIRST_PARAM	FIRSTPVINDEX
+		#define ND_PLUGINNAMEUPPER_FIRST_PARAM FIRSTPVINDEX
 		#define ND_PLUGINNAMEUPPER_LAST_PARAM LASTPVINDEX
 
 	private:
