@@ -9,13 +9,18 @@ import os
 import argparse
 
 
+# Arrays containing valid PV and data types
 datatypes = ["Int32", "Float64", "Octet"]
 pvtypes = [['binary', 'bo', 'bi'], ['multibit', 'mbbo', 'mbbi'], ['analog', 'ao', 'ai'], ['string', 'stringout', 'stringin'], ['waveform', 'waveform', 'waveform']]
+
+
+# Path names to necessary files. These depend on the plugin and are fixed when the update_names.py script is run
 path_to_template = "../PLUGINNAMELOWERApp/Db/NDPluginPLUGINNAMESTANDARD.template"
 path_to_header = "../PLUGINNAMELOWERApp/src/NDPluginPLUGINNAMESTANDARD.h"
 path_to_source = "../PLUGINNAMELOWERApp/src/NDPluginPLUGINNAMESTANDARD.cpp"
 name_of_driver = "NDPluginPLUGINNAMESTANDARD"
 
+# Main function that writes necessary PV info to header and source files. Note that formatting may not be correct.
 def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
     os.rename(path_to_header, path_to_header+"_OLD")
     os.rename(path_to_source, path_to_source+"_OLD")
@@ -33,12 +38,14 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
         elif "FIRST_PARAM" in line:
             if first_pv == True:
                 header_file.write("int "+driver_name+pv_base_name+";\n")
+                line = line.strip()
                 line = line.split(' ')
                 header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name+"\n")
             else:
                 header_file.write(line)
-        elif "LAST_PARAM" in line:
+        elif "LAST_PARAM" in line and first_pv == False:
             header_file.write("int " + driver_name+pv_base_name+";\n")
+            line = line.strip()
             line = line.split(' ')
             header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name+"\n")
         else:
@@ -67,6 +74,7 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
 
 
 
+# Parses input PV string into PV names
 def parse_pv_string(pv_string):
     parts = pv_string.split('_')
     pv_base_name = ""
@@ -78,6 +86,7 @@ def parse_pv_string(pv_string):
 
 
 
+# Writes a waveform pv to template file (waveforms have somewhat different fields)
 def write_pv_waveform(pv_string):
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
     template_file = open(path_to_template, "a+")
@@ -99,6 +108,7 @@ def write_pv_waveform(pv_string):
 
 
 
+# writes a basic pv to the template file (note any PV specific info needs to be added after)
 def write_pv_basic(pv_string, pv_type, dtype):
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
     template_file = open(path_to_template, "a+")
@@ -117,23 +127,34 @@ def write_pv_basic(pv_string, pv_type, dtype):
     template_file.write('}\n')
 
 
+
+# checks if data format is valid
 def check_valid_dform(data_format):
     for dform in datatypes:
         if data_format==dform:
             return True
     return False
 
+
+
+# checks if pv type is valid
 def check_valid_type(pv_type):
     for ptype in pvtypes:
         if ptype[0] == pv_type:
             return True
     return False
 
+
+
+# gets the type of the PV
 def get_type(pv_type):
     for ptype in pvtypes:
         if ptype[0] == pv_type:
             return ptype
 
+
+
+# Parses user command line input
 def parse_args():
     parser = argparse.ArgumentParser(description = "PV boilerplate code generator")
     parser.add_argument('-n', '--name', help='PV String name to be used. Should be all caps with underscores for spaces. ex: EXPOSURE_TIME')
