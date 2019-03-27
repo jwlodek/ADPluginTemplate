@@ -34,6 +34,8 @@ def update_file_names(all_lowercase, standard_name):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../"+all_lowercase+"App/Db/NDPlugin"+standard_name+".template")
     if(os.path.exists("../docs/index.html")):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../docs/index.html")
+    if(os.path.exists("../RELEASE.md")):
+        update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../README.md")
 
 
 # Reads file line by line and updates specific locations with correct plugin name

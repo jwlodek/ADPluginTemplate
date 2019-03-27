@@ -1,3 +1,3 @@
-# ADPlugin___ Releases
+# ADPluginPLUGINNAMESTANDARD Releases
 
-There are currently no releases for ADPlugin___
+There are currently no releases for ADPluginPLUGINNAMESTANDARD
