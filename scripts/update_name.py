@@ -49,9 +49,9 @@ def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
     while(line):
         if "PLUGINNAMESTANDARD" in line:
             line = line.replace("PLUGINNAMESTANDARD", standard_name)
-        elif "PLUGINNAMEUPPER" in line:
+        if "PLUGINNAMEUPPER" in line:
             line = line.replace("PLUGINNAMEUPPER", all_uppercase)
-        elif "PLUGINNAMELOWER" in line:
+        if "PLUGINNAMELOWER" in line:
             line = line.replace("PLUGINNAMELOWER", all_lowercase)
         newFile.write(line)
         line = oldFile.readline()

@@ -30,14 +30,14 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
             header_file.write(line)
             header_file.write("\n\n")
             header_file.write("#define "+driver_name+pv_base_name+"String \t\t\t"+pv_string+"\t\tasynParam"+dtype)
-        else if "FIRST_PARAM" in line:
+        elif "FIRST_PARAM" in line:
             if first_pv == True:
                 header_file.write("int "+driver_name+pv_base_name+";")
                 line = line.split(' ')
                 header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name)
             else:
                 header_file.write(line)
-        else if "LAST_PARAM" in line:
+        elif "LAST_PARAM" in line:
             header_file.write("int " + driver_name+pv_base_name+";")
             line = line.split(' ')
             header_file.write(line[0]+" "+line[1]+ " "+driver_name+pv_base_name)
@@ -51,7 +51,7 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
         if driver_name+"::"+driver_name in line_src:
             isConstructor = True
             source_file.write(line_src)
-        else if "{" in line_src and isConstructor:
+        elif "{" in line_src and isConstructor:
             source_file.write(line_src)
             source_file.write("\n\n")
             source_file.write("createParam("+driver_name+pv_base_name+"String,\t\t\tasynParam"+dtype+",\t\t&"+driver_name+pv_base_name+");")
