@@ -29,7 +29,7 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
         if "MODIFICATION" in line:
             header_file.write(line)
             header_file.write("\n\n")
-            header_file.write("#define "+driver_name+pv_base_name+"String "+pv_string+" //asynParam"+dtype+"\n")
+            header_file.write("#define "+driver_name+pv_base_name+"String "+'"'+pv_string+'"'+" //asynParam"+dtype+"\n")
         elif "FIRST_PARAM" in line:
             if first_pv == True:
                 header_file.write("int "+driver_name+pv_base_name+";\n")
@@ -140,7 +140,7 @@ def parse_args():
     parser.add_argument('-t', '--type', help='Record type for the PV (binary, multibit, analog, string, waveform)')
     parser.add_argument('-d', '--data-format', help='Data type for the record (Int32, Float64, Octet)')
     parser.add_argument('-f', '--first', action='store_true', help='used to tag as the first pv')
-    arguments = vars(pareser.parse_args())
+    arguments = vars(parser.parse_args())
     if arguments["name"] is None:
         print("No name specified, pv not being added")
         return
