@@ -52,7 +52,8 @@ The add_pv.py script is meant to greatly simplify this process by allowing a scr
 3) Finally, decide on the PV type. These are: binary, multibit, analog, string, waveform. Ex. Exposure time is an analog value, a dropdown pv menu would be multi bit, a message would be a string or waveform.
 
 Now, simply run the script, specifying your choices by the appropriate flags:
-Flag  | Usage
+
+Flag   | Usage
 -------|--------
 -n     | PV String name (`EXPOSURE_TIME`)
 -f      | If this PV is the first added to the project, add this -f flag
