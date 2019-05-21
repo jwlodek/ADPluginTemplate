@@ -24,3 +24,9 @@ To fully automate the initial setup, you may run the `initializePlugin.sh` scrip
 Alternatively, you may run the `update_name.py` script by itself, which will update all occurances of the plugin name in the template to a name of your choosing.
 
 Also, make sure to replace this README.md file with one that explains how to use your new plugin!
+
+### Current Plugins Developed with ADPluginTemplate
+
+Below is an expanding list of plugins built with ADPluginTemplate. If you have made a plugin with it and want it listed here, feel free to make a pull request!
+
+* [ADPluginDmtx](https://github.com/epicsNSLS2-areaDetector/ADPluginDmtx) - A data matrix barcode reader
