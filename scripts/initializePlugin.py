@@ -22,14 +22,14 @@ import os
 
 def parse_user_args():
     parser = argparse.ArgumentParser(description="Initialize ADPlugin from template")
-    parser.add_argument('-o', '--only-update', action='store_true', help='Flag that forces initPlugin.py to only apply the update names script, not initialize version control.')
+    parser.add_argument('-o', '--onlyupdate', action='store_true', help='Flag that forces initPlugin.py to only apply the update names script, not initialize version control.')
     parser.add_argument('-n', '--name', help="Flag representing new plugin's name, without 'AD' at the start. ex. EmergentVision")
     arguments = vars(parser.parse_args())
     if arguments['name'] is None:
         print('ERROR - Please specifiy a plugin name, run with -h for help.')
         exit()
     else:
-        return arguments['name'], arguments['only-update']
+        return arguments['name'], arguments['onlyupdate']
 
 
 
