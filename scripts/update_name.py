@@ -101,4 +101,14 @@ def parse_args():
 
 
 # calls other functions
-parse_args()
+#parse_args()
+
+def run_all(name):
+    all_lowercase = name.lower()
+    all_uppercase = name.upper()
+    standard_name = all_lowercase.capitalize()
+
+    update_dir_names(all_lowercase)
+    update_file_names(all_lowercase, standard_name)
+    update_sources(all_lowercase, all_uppercase, standard_name)
+    update_root_dir(standard_name)

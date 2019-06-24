@@ -1,3 +1,5 @@
+#!/usr/bin/python3
+
 # This is a script that allows for rapid adding of PVs to the plugin, which
 # avoids having to edit 3 different files in a specific manner.
 #
