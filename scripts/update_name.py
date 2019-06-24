@@ -129,3 +129,5 @@ def run_all(name):
     update_sources(all_lowercase, all_uppercase, standard_name)
     if platform == 'linux':
         update_root_dir(standard_name)
+    else:
+        print('Your OS does not allow for changing the root directory of the plugin, as this script was run inside of it. Please change it manually.')

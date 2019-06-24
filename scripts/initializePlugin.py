@@ -67,7 +67,7 @@ if only_update:
 os.chdir('..')
 
 print('Updating .gitignore')
-gitignore_fp = open('gitignore', 'a')
+gitignore_fp = open('.gitignore', 'a')
 gitignore_fp.write('scripts/\n')
 gitignore_fp.close()
 
@@ -75,7 +75,7 @@ print('Initializing new ADPlugin' + name + ' README.md file')
 os.rename('README.md', 'TemplateReadme.md')
 
 readme_fp = open('README.md', 'w')
-readme_fp.write('# ADPlugin' + name + '\n')
+readme_fp.write('# ADPlugin' + name + '\n\n')
 readme_fp.write('This plugin is currently under development\n\n')
 readme_fp.write('This plugin was built with the help of [ADPluginTemplate](https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate)')
 readme_fp.close()
@@ -87,4 +87,3 @@ subprocess.call(['git', 'add', '-A'])
 subprocess.call(['git', 'commit', '-m', 'Initial Commit for ADPlugin' + name])
 
 print('ADPlugin' + name + ' initialized from ADPluginTemplate successfully.')
-print('Note that on windows machines it is required to still manually change the top directory name.')
