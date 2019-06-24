@@ -66,3 +66,10 @@ python3 add_pv.py -n EXPOSURE_TIME -f -d Float64 -t analog
 python3 add_pv.py -n OPERATION_MODE -d Int32 -t multibit
 python3 add_pv.py -n STATUS_MESSAGE -d Octet -t waveform
 ```
+
+### Current Plugins Developed with ADPluginTemplate
+
+Below is an expanding list of plugins built with ADPluginTemplate. If you have made a plugin with it and want it listed here, feel free to make a pull request!
+
+* [ADPluginDmtx](https://github.com/epicsNSLS2-areaDetector/ADPluginDmtx) - A data matrix barcode reader
+* [ADPluginTemplate](https://github.com/epicsNSLS2-areaDetector/ADPluginTimelapse) - A timelapse video generator for areaDetector (Still under development)
