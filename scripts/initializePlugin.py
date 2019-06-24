@@ -68,7 +68,7 @@ os.chdir('..')
 
 print('Updating .gitignore')
 gitignore_fp = open('.gitignore', 'a')
-gitignore_fp.write('scripts/\n')
+gitignore_fp.write('\nscripts/\n')
 gitignore_fp.close()
 
 print('Initializing new ADPlugin' + name + ' README.md file')

@@ -3,11 +3,11 @@
 This repository contains a pre-organized file structure for writing areaDetector plugins.
 To use it, start by downloading a zip of one of the releases. You can use wget:
 ```
-wget https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate/archive/R0.3.zip
+wget https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate/archive/R0.4.zip
 ```
 OR
 ```
-wget https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate/archive/R0.3.tar.gz
+wget https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate/archive/R0.4.tar.gz
 ```
 if you prefer tar over zip.
 
@@ -30,9 +30,19 @@ update_name.py | A python script that updates occurances of the plugin name | py
 add_pv.py | A python script that adds boilerplate code for new PVs to the plugin | python3 add_pv.py -n $PV_NAME -t $PV_TYPE -d $PV_DTYPE
 initializePlugin.sh | A bash script that runs the python script and inits git version control | ./initializePlugin.sh $NAME
 
-To fully automate the initial setup, you may run the `initializePlugin.sh` script (requires bash > 4.0). This will run the `update_name.py` script, and initialize a git repo, and make an initial commit. You will need to add a remote repository in order to be able to push the git changes however, and a global git config is required for the git commands to function correctly.
+To fully automate the initial setup, you may run the `initializePlugin.py` script (requires python > 3.* and git). This will run the `update_name.py` script, and initialize a git repo, and make an initial commit. You will need to add a remote repository in order to be able to push the git changes however, and a global git config is required for the git commands to function correctly.
 
-Alternatively, you may run the `update_name.py` script by itself, which will update all occurances of the plugin name in the template to a name of your choosing.
+Alternatively, you may add thge `-o` flag to the `initializePlugin.py` script, which will run the `update_name.py` script by itself, without initializing git version control.
+
+**Example usage:**
+
+```
+./initializePlugin.py -n ADPluginTest
+```
+```
+./initializePlugin.py -n Test -o
+```
+Note that if the given name starts with `ADPlugin`, the name used will be whatever is after it. If it starts with just `AD`, the name will be whatever comes after `AD`.
 
 Also, make sure to replace this README.md file with one that explains how to use your new plugin!
 

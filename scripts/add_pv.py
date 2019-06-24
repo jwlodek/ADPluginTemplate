@@ -1,11 +1,16 @@
 #!/usr/bin/python3
 
-# This is a script that allows for rapid adding of PVs to the plugin, which
-# avoids having to edit 3 different files in a specific manner.
-#
-# Author: Jakub Wlodek
-# Created on: 27-Mar-2019
-#
+"""
+This is a script that allows for rapid adding of PVs to the plugin, which
+avoids having to edit 3 different files in a specific manner.
+"""
+
+__author__      = "Jakub Wlodek"
+__copyright__   = "Copyright June 2019, Brookhaven Science Associates"
+__license__     = "GPL"
+__version__     = "R0.4"
+__maintainer__  = "Jakub Wlodek"
+__created__     = "27-Mar-2019"
 
 import os
 import argparse
@@ -22,8 +27,10 @@ path_to_header = "../PLUGINNAMELOWERApp/src/NDPluginPLUGINNAMESTANDARD.h"
 path_to_source = "../PLUGINNAMELOWERApp/src/NDPluginPLUGINNAMESTANDARD.cpp"
 name_of_driver = "NDPluginPLUGINNAMESTANDARD"
 
-# Main function that writes necessary PV info to header and source files. Note that formatting may not be correct.
+
 def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
+    """ Main function that writes necessary PV info to header and source files. Note that formatting may not be correct. """
+
     os.rename(path_to_header, path_to_header+"_OLD")
     os.rename(path_to_source, path_to_source+"_OLD")
     header_file_old = open(path_to_header+"_OLD", "r+")
@@ -79,9 +86,9 @@ def write_init_pv(pv_base_name, pv_string, driver_name, first_pv, dtype):
     source_file.close()
 
 
-
-# Parses input PV string into PV names
 def parse_pv_string(pv_string):
+    """ Parses input PV string into PV names """
+
     parts = pv_string.split('_')
     pv_base_name = ""
     for i in range(0, len(parts)):
@@ -91,9 +98,9 @@ def parse_pv_string(pv_string):
     return pv_base_name, pv_readback_name
 
 
-
-# Writes a waveform pv to template file (waveforms have somewhat different fields)
 def write_pv_waveform(pv_string):
+    """ Writes a waveform pv to template file (waveforms have somewhat different fields) """
+
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
     template_file = open(path_to_template, "a+")
     template_file.write("\n\n")
@@ -113,9 +120,9 @@ def write_pv_waveform(pv_string):
     template_file.write('}\n')
 
 
-
-# writes a basic pv to the template file (note any PV specific info needs to be added after)
 def write_pv_basic(pv_string, pv_type, dtype):
+    """ writes a basic pv to the template file (note any PV specific info needs to be added after) """
+
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
     template_file = open(path_to_template, "a+")
     template_file.write("\n\n")
@@ -134,34 +141,36 @@ def write_pv_basic(pv_string, pv_type, dtype):
 
 
 
-# checks if data format is valid
+
 def check_valid_dform(data_format):
+    """ checks if data format is valid """
+
     for dform in datatypes:
         if data_format==dform:
             return True
     return False
 
 
-
-# checks if pv type is valid
 def check_valid_type(pv_type):
+    """ checks if pv type is valid """
+
     for ptype in pvtypes:
         if ptype[0] == pv_type:
             return True
     return False
 
 
-
-# gets the type of the PV
 def get_type(pv_type):
+    """ gets the type of the PV """
+
     for ptype in pvtypes:
         if ptype[0] == pv_type:
             return ptype
 
 
-
-# Parses user command line input
 def parse_args():
+    """ Parses user command line input """
+
     parser = argparse.ArgumentParser(description = "PV boilerplate code generator")
     parser.add_argument('-n', '--name', help='PV String name to be used. Should be all caps with underscores for spaces. ex: EXPOSURE_TIME')
     parser.add_argument('-t', '--type', help='Record type for the PV (binary, multibit, analog, string, waveform)')
@@ -192,6 +201,7 @@ def parse_args():
     write_init_pv(pv_base_name, pv_string, name_of_driver, arguments["first"], data_format)
 
 
+# Parse the args and run the scripts
 parse_args()
 
     
