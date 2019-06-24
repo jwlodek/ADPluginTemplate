@@ -47,22 +47,22 @@ static const char *pluginName="NDPluginPLUGINNAMESTANDARD";
  * @return: success if PV was updated correctly, otherwise error
  */
 asynStatus NDPluginPLUGINNAMESTANDARD::writeInt32(asynUser* pasynUser, epicsInt32 value){
-	const char* functionName = "writeInt32";
-	int function = pasynUser->reason;
-	asynStatus status = asynSuccess;
+    const char* functionName = "writeInt32";
+    int function = pasynUser->reason;
+    asynStatus status = asynSuccess;
 
-	status = setIntegerParam(function, value);
-	asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s::%s function = %d value=%d\n", pluginName, functionName, function, value);
+    status = setIntegerParam(function, value);
+    asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s::%s function = %d value=%d\n", pluginName, functionName, function, value);
 
     // replace PLUGINNAME with your plugin (ex. BAR)
-	if(function < ND_PLUGINNAMEUPPER_FIRST_PARAM){
-		status = NDPluginDriver::writeInt32(pasynUser, value);
-	}
-	callParamCallbacks();
-	if(status){
-		asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s Error writing Int32 val to PV\n", pluginName, functionName);
-	}
-	return status;
+    if(function < ND_PLUGINNAMEUPPER_FIRST_PARAM){
+        status = NDPluginDriver::writeInt32(pasynUser, value);
+    }
+    callParamCallbacks();
+    if(status){
+        asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s Error writing Int32 val to PV\n", pluginName, functionName);
+    }
+    return status;
 }
 
 
@@ -74,63 +74,63 @@ asynStatus NDPluginPLUGINNAMESTANDARD::writeInt32(asynUser* pasynUser, epicsInt3
  * @return: void
 */
 void NDPluginPLUGINNAMESTANDARD::processCallbacks(NDArray *pArray){
-	static const char* functionName = "processCallbacks";
-	NDArray *pScratch;
-	asynStatus status = asynSuccess;
-	NDArrayInfo arrayInfo;
+    static const char* functionName = "processCallbacks";
+    NDArray *pScratch;
+    asynStatus status = asynSuccess;
+    NDArrayInfo arrayInfo;
 
-	//call base class and get information about frame
-	NDPluginDriver::beginProcessCallbacks(pArray);
+    //call base class and get information about frame
+    NDPluginDriver::beginProcessCallbacks(pArray);
 
-	// convert to Mat
-	pArray->getInfo(&arrayInfo);
+    // convert to Mat
+    pArray->getInfo(&arrayInfo);
 
-	//unlock the mutex for the processing portion
-	this->unlock();
+    //unlock the mutex for the processing portion
+    this->unlock();
 
-	// Process your image here.
+    // Process your image here.
     // Access data with pArray->pData
     // DO NOT CALL pArray.release()
-	// If used, call pScratch.release()
+    // If used, call pScratch.release()
     // use doCallbacksGenericPointer with pScratch to pass processed image to plugin array port
 
-	this->lock();
+    this->lock();
 
-	if(status == asynError){
-		asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s Error, image not processed correctly\n", pluginName, functionName);
-		return;
-	}
+    if(status == asynError){
+        asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s Error, image not processed correctly\n", pluginName, functionName);
+    return;
+    }
 
-	callParamCallbacks();
+    callParamCallbacks();
 }
 
 
 
 //constructror from base class, replace with your plugin name
 NDPluginPLUGINNAMESTANDARD::NDPluginPLUGINNAMESTANDARD(const char *portName, int queueSize, int blockingCallbacks,
-		const char *NDArrayPort, int NDArrayAddr,
-		int maxBuffers, size_t maxMemory,
-		int priority, int stackSize)
-		/* Invoke the base class constructor */
-		: NDPluginDriver(portName, queueSize, blockingCallbacks,
-		NDArrayPort, NDArrayAddr, 1, maxBuffers, maxMemory,
-		asynInt32ArrayMask | asynFloat64ArrayMask | asynGenericPointerMask,
-		asynInt32ArrayMask | asynFloat64ArrayMask | asynGenericPointerMask,
-		ASYN_MULTIDEVICE, 1, priority, stackSize, 1)
+        const char *NDArrayPort, int NDArrayAddr,
+        int maxBuffers, size_t maxMemory,
+        int priority, int stackSize)
+        /* Invoke the base class constructor */
+        : NDPluginDriver(portName, queueSize, blockingCallbacks,
+        NDArrayPort, NDArrayAddr, 1, maxBuffers, maxMemory,
+        asynInt32ArrayMask | asynFloat64ArrayMask | asynGenericPointerMask,
+        asynInt32ArrayMask | asynFloat64ArrayMask | asynGenericPointerMask,
+        ASYN_MULTIDEVICE, 1, priority, stackSize, 1)
 {
 
-	char versionString[25];
+    char versionString[25];
 
-	// Create PV parameters here
+    // Create PV parameters here
     // EXAMPLE:
     // createParam(PVString, 	asynParamOctet, 	&PVIndex);  -> string and waveform records
     // createParam(PVString, 	asynParamInt32, 	&PVIndex);  -> int records
     // createParam(PVString, 	asynParamFloat64, 	&PVIndex);  -> float records
 
-	setStringParam(NDPluginDriverPluginType, "NDPluginPLUGINNAMESTANDARD");
-	epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", PLUGINNAMEUPPER_VERSION, PLUGINNAMEUPPER_REVISION, PLUGINNAMEUPPER_MODIFICATION);
-	setStringParam(NDDriverVersion, versionString);
-	connectToArrayPort();
+    setStringParam(NDPluginDriverPluginType, "NDPluginPLUGINNAMESTANDARD");
+    epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", PLUGINNAMEUPPER_VERSION, PLUGINNAMEUPPER_REVISION, PLUGINNAMEUPPER_MODIFICATION);
+    setStringParam(NDDriverVersion, versionString);
+    connectToArrayPort();
 }
 
 
@@ -142,13 +142,13 @@ NDPluginPLUGINNAMESTANDARD::NDPluginPLUGINNAMESTANDARD(const char *portName, int
  * @params[in]	-> all passed to constructor
  */
 extern "C" int NDPLUGINNAMESTANDARDConfigure(const char *portName, int queueSize, int blockingCallbacks,
-		const char *NDArrayPort, int NDArrayAddr,
-		int maxBuffers, size_t maxMemory,
-		int priority, int stackSize){
+        const char *NDArrayPort, int NDArrayAddr,
+        int maxBuffers, size_t maxMemory,
+        int priority, int stackSize){
 
-	NDPluginPLUGINNAMESTANDARD *pPlugin = new NDPluginPLUGINNAMESTANDARD(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
-		maxBuffers, maxMemory, priority, stackSize);
-	return pPlugin->start();
+    NDPluginPLUGINNAMESTANDARD *pPlugin = new NDPluginPLUGINNAMESTANDARD(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
+        maxBuffers, maxMemory, priority, stackSize);
+    return pPlugin->start();
 }
 
 
@@ -163,14 +163,14 @@ static const iocshArg initArg6 = { "maxMemory",iocshArgInt};
 static const iocshArg initArg7 = { "priority",iocshArgInt};
 static const iocshArg initArg8 = { "stackSize",iocshArgInt};
 static const iocshArg * const initArgs[] = {&initArg0,
-					&initArg1,
-					&initArg2,
-					&initArg3,
-					&initArg4,
-					&initArg5,
-					&initArg6,
-					&initArg7,
-					&initArg8};
+                &initArg1,
+                &initArg2,
+                &initArg3,
+                &initArg4,
+                &initArg5,
+                &initArg6,
+                &initArg7,
+                &initArg8};
 
 
 // Define the path to your plugin's extern configure function above
@@ -179,19 +179,19 @@ static const iocshFuncDef initFuncDef = {"NDPLUGINNAMESTANDARDConfigure",9,initA
 
 /* link the configure function with the passed args, and call it from the IOC shell */
 static void initCallFunc(const iocshArgBuf *args){
-	NDPLUGINNAMESTANDARDConfigure(args[0].sval, args[1].ival, args[2].ival,
-			args[3].sval, args[4].ival, args[5].ival,
-			args[6].ival, args[7].ival, args[8].ival);
+    NDPLUGINNAMESTANDARDConfigure(args[0].sval, args[1].ival, args[2].ival,
+            args[3].sval, args[4].ival, args[5].ival,
+            args[6].ival, args[7].ival, args[8].ival);
 }
 
 
 /* function to register the configure function in the IOC shell */
 extern "C" void NDPLUGINNAMESTANDARDRegister(void){
-	iocshRegister(&initFuncDef,initCallFunc);
+    iocshRegister(&initFuncDef,initCallFunc);
 }
 
 
 /* Exports plugin registration */
 extern "C" {
-	epicsExportRegistrar(NDPLUGINNAMESTANDARDRegister);
+    epicsExportRegistrar(NDPLUGINNAMESTANDARDRegister);
 }

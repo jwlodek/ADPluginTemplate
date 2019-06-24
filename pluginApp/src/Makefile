@@ -10,7 +10,7 @@ include $(TOP)/configure/CONFIG
 # so we get automatic template instantiation.
 # This is what we want for the source files that define template functions.
 ifeq (vxWorks,$(findstring vxWorks, $(T_A)))
-	CODE_CXXFLAGS=
+    CODE_CXXFLAGS=
 endif
 
 DBD += NDPluginPLUGINNAMESTANDARD.dbd
