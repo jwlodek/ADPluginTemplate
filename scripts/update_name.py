@@ -127,5 +127,5 @@ def run_all(name):
     update_dir_names(all_lowercase)
     update_file_names(all_lowercase, standard_name)
     update_sources(all_lowercase, all_uppercase, standard_name)
-    if platfrom == 'linux':
+    if platform == 'linux':
         update_root_dir(standard_name)
