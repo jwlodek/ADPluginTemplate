@@ -33,26 +33,26 @@ using namespace std;
 
 /* Plugin class, extends plugin driver */
 class NDPluginPLUGINNAMESTANDARD : public NDPluginDriver {
-	public:
-		NDPluginPLUGINNAMESTANDARD(const char *portName, int queueSize, int blockingCallbacks,
-			const char* NDArrayPort, int NDArrayAddr, int maxBuffers,
-			size_t maxMemory, int priority, int stackSize);
+    public:
+        NDPluginPLUGINNAMESTANDARD(const char *portName, int queueSize, int blockingCallbacks,
+            const char* NDArrayPort, int NDArrayAddr, int maxBuffers,
+            size_t maxMemory, int priority, int stackSize);
 
-		//~NDPlugin___();
+        //~NDPlugin___();
 
-		void processCallbacks(NDArray *pArray);
+        void processCallbacks(NDArray *pArray);
 
-		virtual asynStatus writeInt32(asynUser* pasynUser, epicsInt32 value);
+        virtual asynStatus writeInt32(asynUser* pasynUser, epicsInt32 value);
 
-	protected:
+    protected:
 
-		//in this section i define the coords of database vals
+        //in this section i define the coords of database vals
 
-		//Place PV indexes here, define first and last as appropriate, replace PLUGINNAME with name, 
-		#define ND_PLUGINNAMEUPPER_FIRST_PARAM FIRSTPVINDEX
-		#define ND_PLUGINNAMEUPPER_LAST_PARAM LASTPVINDEX
+        //Place PV indexes here, define first and last as appropriate, replace PLUGINNAME with name, 
+        #define ND_PLUGINNAMEUPPER_FIRST_PARAM FIRSTPVINDEX
+        #define ND_PLUGINNAMEUPPER_LAST_PARAM LASTPVINDEX
 
-	private:
+    private:
 
         // init all global variables here
 
