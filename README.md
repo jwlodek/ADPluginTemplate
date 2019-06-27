@@ -82,4 +82,4 @@ python3 add_pv.py -n STATUS_MESSAGE -d Octet -t waveform
 Below is an expanding list of plugins built with ADPluginTemplate. If you have made a plugin with it and want it listed here, feel free to make a pull request!
 
 * [ADPluginDmtx](https://github.com/epicsNSLS2-areaDetector/ADPluginDmtx) - A data matrix barcode reader
-* [ADPluginTemplate](https://github.com/epicsNSLS2-areaDetector/ADPluginTimelapse) - A timelapse video generator for areaDetector (Still under development)
+* [ADPluginTimelapse](https://github.com/epicsNSLS2-areaDetector/ADPluginTimelapse) - A timelapse video generator for areaDetector (Still under development)
