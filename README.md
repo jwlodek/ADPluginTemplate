@@ -69,12 +69,13 @@ Flag   | Usage
 -f      | If this PV is the first added to the project, add this -f flag
 -d      | The data type for the PV (Int32, Float64, Octet)
 -t      | PV type (binary, multibit, analog, string, waveform)
+-a      | Add this flag to add this PV to the autosave file
 
 An example run of the script to add exposure time, operating mode, and status message PVs would be:
 ```
 python3 add_pv.py -n EXPOSURE_TIME -f -d Float64 -t analog
 python3 add_pv.py -n OPERATION_MODE -d Int32 -t multibit
-python3 add_pv.py -n STATUS_MESSAGE -d Octet -t waveform
+python3 add_pv.py -n STATUS_MESSAGE -d Octet -t waveform -a
 ```
 
 ### Current Plugins Developed with ADPluginTemplate
