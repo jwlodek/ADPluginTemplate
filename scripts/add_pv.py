@@ -168,11 +168,21 @@ def get_type(pv_type):
             return ptype
 
 
+def print_pv_info(pv_string, pv_type, data_format, pv_base_name, pv_readback_name):
+    """ Prints info about generated PV """
+
+    print('Adding PV boiler plate code for PV {}'.format(pv_string))
+    print('--------------------------------------------')
+    print('Will have type {} and data type {}'.format(pv_type, data_format))
+    print('EPICS shell PV input name: {}'.format(pv_base_name))
+    print('EPICS shell PV readback name: {}'.format(pv_readback_name))
+
+
 def parse_args():
     """ Parses user command line input """
 
     parser = argparse.ArgumentParser(description = "PV boilerplate code generator")
-    required = parser.add_argument_group('required named arguments')
+    required = parser.add_argument_group('required arguments')
     required.add_argument('-n', '--name', required=True, help='PV String name to be used. Should be all caps with underscores for spaces. ex: EXPOSURE_TIME')
     required.add_argument('-t', '--type', required=True, help='Record type for the PV (binary, multibit, analog, string, waveform)')
     required.add_argument('-d', '--data-format', required=True, help='Data type for the record (Int32, Float64, Octet)')
@@ -183,7 +193,7 @@ def parse_args():
         print("Legal PV types:\n-------------------------")
         for elem in pvtypes:
             print(elem[0])
-        print("Legal Data formats:\n-------------------------")
+        print("\nLegal Data formats:\n-------------------------")
         for elem in datatypes:
             print(elem)
         return
@@ -191,6 +201,7 @@ def parse_args():
     pv_type = get_type(arguments["type"])
     data_format = arguments["data_format"]
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
+    print_pv_info(pv_string, pv_type, data_format, pv_base_name, pv_readback_name)
     if(pv_type == "waveform"):
         write_pv_waveform(pv_string)
     else:
@@ -198,6 +209,7 @@ def parse_args():
 
     write_init_pv(pv_base_name, pv_string, name_of_driver, arguments["first"], data_format)
 
+    print('Done.')
 
 # Parse the args and run the scripts
 parse_args()
