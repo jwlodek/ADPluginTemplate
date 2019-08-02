@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 """
 This is a script that allows for rapid adding of PVs to the plugin, which
@@ -172,20 +172,12 @@ def parse_args():
     """ Parses user command line input """
 
     parser = argparse.ArgumentParser(description = "PV boilerplate code generator")
-    parser.add_argument('-n', '--name', help='PV String name to be used. Should be all caps with underscores for spaces. ex: EXPOSURE_TIME')
-    parser.add_argument('-t', '--type', help='Record type for the PV (binary, multibit, analog, string, waveform)')
-    parser.add_argument('-d', '--data-format', help='Data type for the record (Int32, Float64, Octet)')
+    required = parser.add_argument_group('required named arguments')
+    required.add_argument('-n', '--name', required=True, help='PV String name to be used. Should be all caps with underscores for spaces. ex: EXPOSURE_TIME')
+    required.add_argument('-t', '--type', required=True, help='Record type for the PV (binary, multibit, analog, string, waveform)')
+    required.add_argument('-d', '--data-format', required=True, help='Data type for the record (Int32, Float64, Octet)')
     parser.add_argument('-f', '--first', action='store_true', help='used to tag as the first pv')
     arguments = vars(parser.parse_args())
-    if arguments["name"] is None:
-        print("No name specified, pv not being added")
-        return
-    if arguments["type"] is None:
-        print("No type specified, pv not being added")
-        return
-    if arguments["data_format"] is None:
-        print("No data format specified, pv not being added")
-        return
     if check_valid_type(arguments["type"]) == False or check_valid_dform(arguments["data_format"]) == False:
         print("Illegal value for data format or type")
         return
