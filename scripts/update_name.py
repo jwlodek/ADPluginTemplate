@@ -46,6 +46,7 @@ def update_file_names(all_lowercase, standard_name):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../RELEASE.md")
     if(os.path.exists("add_pv.py")):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "add_pv.py")
+        os.chmod('add_pv.py', 0o755)
 
 
 def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
@@ -53,7 +54,7 @@ def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
 
     os.rename(file_path, file_path+"_OLD")
     oldFile = open(file_path+"_OLD", "r")
-    newFile = open(file_path, "w")
+    newFile = open(file_path, "w+")
 
     line = oldFile.readline()
     while(line):

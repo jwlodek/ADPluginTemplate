@@ -180,6 +180,12 @@ def parse_args():
     arguments = vars(parser.parse_args())
     if check_valid_type(arguments["type"]) == False or check_valid_dform(arguments["data_format"]) == False:
         print("Illegal value for data format or type")
+        print("Legal PV types:\n-------------------------")
+        for elem in pvtypes:
+            print(elem[0])
+        print("Legal Data formats:\n-------------------------")
+        for elem in datatypes:
+            print(elem)
         return
     pv_string = arguments["name"]
     pv_type = get_type(arguments["type"])
