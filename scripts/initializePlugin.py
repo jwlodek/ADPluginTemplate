@@ -42,16 +42,16 @@ elif name.startswith('AD'):
 name = name.lower()
 name = name.capitalize()
 
-print("+-----------------------------------------------------------------")
-print("+ ADPluginTemplate, version: {}                               +".format(__version__))
+print("+----------------------------------------------------------------+")
+print("+ ADPluginTemplate, version: {}                                +".format(__version__))
 print("+ Author: Jakub Wlodek                                           +")
 print("+ Copyright (c): Brookhaven National Laboratory 2018-2019        +")
 print("+ This software comes with NO warranty!                          +")
-print("+-----------------------------------------------------------------")
+print("+----------------------------------------------------------------+")
 print()
 
 
-print("Updating ADpluginTemplate with name: {}".format(name))
+print("Updating ADPluginTemplate with name: {}".format(name))
 
 update_name.run_all(name)
 
@@ -72,7 +72,7 @@ os.rename('README.md', 'TemplateReadme.md')
 readme_fp = open('README.md', 'w')
 readme_fp.write('# ADPlugin' + name + '\n\n')
 readme_fp.write('This plugin is currently under development\n\n')
-readme_fp.write('This plugin was built with the help of [ADPluginTemplate](https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate)')
+readme_fp.write('This plugin was built with the help of [ADPluginTemplate](https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate)\n\n')
 readme_fp.close()
 
 print('Initializing git version control with initial commit...')
