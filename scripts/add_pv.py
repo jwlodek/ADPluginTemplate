@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 """
 This is a script that allows for rapid adding of PVs to the plugin, which
@@ -23,6 +23,7 @@ pvtypes = [['binary', 'bo', 'bi'], ['multibit', 'mbbo', 'mbbi'], ['analog', 'ao'
 
 # Path names to necessary files. These depend on the plugin and are fixed when the update_names.py script is run
 path_to_template = "../PLUGINNAMELOWERApp/Db/NDPluginPLUGINNAMESTANDARD.template"
+path_to_as_file = "../PLUGINNAMELOWERApp/Db/NDPluginPLUGINNAMESTANDARD_settings.req"
 path_to_header = "../PLUGINNAMELOWERApp/src/NDPluginPLUGINNAMESTANDARD.h"
 path_to_source = "../PLUGINNAMELOWERApp/src/NDPluginPLUGINNAMESTANDARD.cpp"
 name_of_driver = "NDPluginPLUGINNAMESTANDARD"
@@ -127,6 +128,7 @@ def write_pv_basic(pv_string, pv_type, dtype):
     template_file = open(path_to_template, "a+")
     template_file.write("\n\n")
     template_file.write('record('+pv_type[1]+', "$(P)$(R)'+pv_base_name+'"){\n')
+    template_file.write('    field(PINI, "YES")\n')
     template_file.write('    field(DTYP, "asyn'+dtype+'")\n')
     template_file.write('    field(OUT, "@asyn($(PORT),$(ADDR), $(TIMEOUT))'+pv_string+'")\n')
     template_file.write('    field(VAL, "0")\n')
@@ -168,38 +170,54 @@ def get_type(pv_type):
             return ptype
 
 
+def print_pv_info(pv_string, pv_type, data_format, pv_base_name, pv_readback_name):
+    """ Prints info about generated PV """
+
+    print('\nAdding PV boilerplate code for PV {}'.format(pv_string))
+    print('--------------------------------------------')
+    print('Will have type {} and data type asyn{}'.format(pv_type[0], data_format))
+    print('EPICS shell PV input name: $(P)$(R){}'.format(pv_base_name))
+    print('EPICS shell PV readback name: $(P)$(R){}'.format(pv_readback_name))
+
+
 def parse_args():
     """ Parses user command line input """
 
     parser = argparse.ArgumentParser(description = "PV boilerplate code generator")
-    parser.add_argument('-n', '--name', help='PV String name to be used. Should be all caps with underscores for spaces. ex: EXPOSURE_TIME')
-    parser.add_argument('-t', '--type', help='Record type for the PV (binary, multibit, analog, string, waveform)')
-    parser.add_argument('-d', '--data-format', help='Data type for the record (Int32, Float64, Octet)')
-    parser.add_argument('-f', '--first', action='store_true', help='used to tag as the first pv')
+    required = parser.add_argument_group('required arguments')
+    required.add_argument('-n', '--name', required=True, help='PV String name to be used. Should be all caps with underscores for spaces. ex: EXPOSURE_TIME')
+    required.add_argument('-t', '--type', required=True, help='Record type for the PV (binary, multibit, analog, string, waveform)')
+    required.add_argument('-d', '--data-format', required=True, help='Data type for the record (Int32, Float64, Octet)')
+    parser.add_argument('-f', '--first', action='store_true', help='Used to tag as the first pv')
+    parser.add_argument('-a', '--autosave', action='store_true', help='Add this flag if you would like this PV to be added to the autosave file')
     arguments = vars(parser.parse_args())
-    if arguments["name"] is None:
-        print("No name specified, pv not being added")
-        return
-    if arguments["type"] is None:
-        print("No type specified, pv not being added")
-        return
-    if arguments["data_format"] is None:
-        print("No data format specified, pv not being added")
-        return
     if check_valid_type(arguments["type"]) == False or check_valid_dform(arguments["data_format"]) == False:
         print("Illegal value for data format or type")
+        print("Legal PV types:\n-------------------------")
+        for elem in pvtypes:
+            print(elem[0])
+        print("\nLegal Data formats:\n-------------------------")
+        for elem in datatypes:
+            print(elem)
         return
     pv_string = arguments["name"]
     pv_type = get_type(arguments["type"])
     data_format = arguments["data_format"]
     pv_base_name, pv_readback_name = parse_pv_string(pv_string)
+    print_pv_info(pv_string, pv_type, data_format, pv_base_name, pv_readback_name)
     if(pv_type == "waveform"):
         write_pv_waveform(pv_string)
     else:
         write_pv_basic(pv_string, pv_type, data_format)
 
+    if arguments['autosave']:
+        as_file = open(path_to_as_file, 'a')
+        as_file.write('$(P)$(R){}\n'.format(pv_base_name))
+        as_file.close()
+
     write_init_pv(pv_base_name, pv_string, name_of_driver, arguments["first"], data_format)
 
+    print('Done.')
 
 # Parse the args and run the scripts
 parse_args()

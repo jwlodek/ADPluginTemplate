@@ -9,13 +9,10 @@ where NAME is the name of the plugin you are developing
 
 __author__      = "Jakub Wlodek"
 __copyright__   = "Copyright June 2019, Brookhaven Science Associates"
-__license__     = "GPL"
-__version__     = "R0.4"
-__maintainer__  = "Jakub Wlodek"
+__version__     = "R0.5"
 
 
 import os
-import argparse
 from sys import platform
 
 
@@ -49,6 +46,7 @@ def update_file_names(all_lowercase, standard_name):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "../RELEASE.md")
     if(os.path.exists("add_pv.py")):
         update_source_file(all_lowercase, all_lowercase.upper(), standard_name, "add_pv.py")
+        os.chmod('add_pv.py', 0o755)
 
 
 def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
@@ -56,7 +54,7 @@ def update_source_file(all_lowercase, all_uppercase, standard_name, file_path):
 
     os.rename(file_path, file_path+"_OLD")
     oldFile = open(file_path+"_OLD", "r")
-    newFile = open(file_path, "w")
+    newFile = open(file_path, "w+")
 
     line = oldFile.readline()
     while(line):
@@ -91,31 +89,6 @@ def update_root_dir(standard_name):
         if "ADPluginTemplate" in directory_name:
             os.rename("../../"+directory_name, "../../ADPlugin"+standard_name)
 
-
-def parse_args():
-    """ Parses name from user args in command line - no longer used """
-
-    parser = argparse.ArgumentParser(description="Update plugin names in template")
-    parser.add_argument('-n', '--name', help = 'Name of the plugin')
-    arguments = vars(parser.parse_args())
-
-    if arguments["name"] is not None:
-        name = arguments["name"]
-        all_lowercase = name.lower()
-        all_uppercase = name.upper()
-        standard_name = all_lowercase.capitalize()
-
-        update_dir_names(all_lowercase)
-        update_file_names(all_lowercase, standard_name)
-        update_sources(all_lowercase, all_uppercase, standard_name)
-        update_root_dir(standard_name)
-
-    else:
-        print("Error, no plugin name specified")
-
-
-# calls other functions
-#parse_args()
 
 def run_all(name):
     """ updates names """

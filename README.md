@@ -3,11 +3,11 @@
 This repository contains a pre-organized file structure for writing areaDetector plugins.
 To use it, start by downloading a zip of one of the releases. You can use wget:
 ```
-wget https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate/archive/R0.4.zip
+wget https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate/archive/R0.5.zip
 ```
 OR
 ```
-wget https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate/archive/R0.4.tar.gz
+wget https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate/archive/R0.5.tar.gz
 ```
 if you prefer tar over zip.
 
@@ -18,8 +18,8 @@ contain all changes made to this template.
 
 Once you download and the template, unzip and navigate to the scripts directory as follows:
 ```
-unzip R0.3.zip
-cd ADPluginTemplate-R0.3
+unzip R0.5.zip
+cd ADPluginTemplate-R0.5
 cd scripts
 ```
 inside, you will find three scripts:
@@ -28,7 +28,7 @@ Script | Description | Usage
 --------|------------------------|--------------
 update_name.py | A python script that updates occurances of the plugin name | python3 update_name.py -n $NAME
 add_pv.py | A python script that adds boilerplate code for new PVs to the plugin | python3 add_pv.py -n $PV_NAME -t $PV_TYPE -d $PV_DTYPE
-initializePlugin.sh | A bash script that runs the python script and inits git version control | ./initializePlugin.sh $NAME
+initializePlugin.py | A python script that runs the update_name script and inits git version control | ./initializePlugin.py -n $NAME
 
 To fully automate the initial setup, you may run the `initializePlugin.py` script (requires python > 3.* and git). This will run the `update_name.py` script, and initialize a git repo, and make an initial commit. You will need to add a remote repository in order to be able to push the git changes however, and a global git config is required for the git commands to function correctly.
 
