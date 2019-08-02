@@ -72,7 +72,7 @@ os.rename('README.md', 'TemplateReadme.md')
 readme_fp = open('README.md', 'w')
 readme_fp.write('# ADPlugin' + name + '\n\n')
 readme_fp.write('This plugin is currently under development\n\n')
-readme_fp.write('This plugin was built with the help of [ADPluginTemplate](https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate)\n\n')
+readme_fp.write('**NOTE: This plugin was built with the help of [ADPluginTemplate](https://github.com/epicsNSLS2-areaDetector/ADPluginTemplate)**\n\n')
 readme_fp.close()
 
 print('Initializing git version control with initial commit...')
