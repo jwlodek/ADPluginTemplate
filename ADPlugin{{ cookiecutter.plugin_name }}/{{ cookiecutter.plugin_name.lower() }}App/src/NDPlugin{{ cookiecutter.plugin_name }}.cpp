@@ -24,23 +24,51 @@
 #include <iocsh.h>
 #include "NDArray.h"
 // Include your plugin's header file here
-#include "NDPlugin{{ cookiecutter.plugin_name }}.h"
+#include "NDPlugin{{ cookiecutter.plugin_name }}.hpp"
 #include <epicsExport.h>
 
-// include your external dependency libraries here
+
+// Error message formatters
+#define ERR(msg)                                                                                 \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: %s\n", pluginName, functionName, \
+              msg)
+
+#define ERR_ARGS(fmt, ...)                                                              \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: " fmt "\n", pluginName, \
+              functionName, __VA_ARGS__);
+
+// Warning message formatters
+#define WARN(msg) \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: %s\n", pluginName, functionName, msg)
+
+#define WARN_ARGS(fmt, ...)                                                            \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: " fmt "\n", pluginName, \
+              functionName, __VA_ARGS__);
+
+// Log message formatters
+#define LOG(msg) \
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s::%s: %s\n", pluginName, functionName, msg)
+
+#define LOG_ARGS(fmt, ...)                                                                       \
+    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s::%s: " fmt "\n", pluginName, functionName, \
+              __VA_ARGS__);
 
 
-//some basic namespaces
+// Include your external dependency library headers
+
+
+// Namespaces
 using namespace std;
 
 
-// Name your plugin
+// Name of the plugin
 static const char *pluginName="NDPlugin{{ cookiecutter.plugin_name }}";
-
 
 
 /**
  * Override of NDPluginDriver function. Must be implemented by your plugin
+ *
+ * Performs callback when write operation is performed on an asynInt32 record
  * 
  * @params[in]: pasynUser	-> pointer to asyn User that initiated the transaction
  * @params[in]: value		-> value PV was set to
@@ -52,15 +80,16 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUse
     asynStatus status = asynSuccess;
 
     status = setIntegerParam(function, value);
-    asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s::%s function = %d value=%d\n", pluginName, functionName, function, value);
+    LOG_ARGS("function = %d value=%d", function, value);
 
-    // replace PLUGINNAME with your plugin (ex. BAR)
+    // TODO: Handle callbacks for any integer param write ops
+    
     if(function < ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM){
         status = NDPluginDriver::writeInt32(pasynUser, value);
     }
     callParamCallbacks();
     if(status){
-        asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s Error writing Int32 val to PV\n", pluginName, functionName);
+        ERR_ARGS("Failed to wrote Int32 val to PV: function = %d value=%d", function, value);
     }
     return status;
 }
@@ -79,30 +108,56 @@ void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
     asynStatus status = asynSuccess;
     NDArrayInfo arrayInfo;
 
+    // If set to true, downstream plugins will perform callbacks on output pScratch
+    // If false, no downstream callbacks will be performed
+    bool performCallbacks = true;
+
     //call base class and get information about frame
     NDPluginDriver::beginProcessCallbacks(pArray);
 
-    // convert to Mat
     pArray->getInfo(&arrayInfo);
 
     //unlock the mutex for the processing portion
     this->unlock();
 
-    // Process your image here.
-    // Access data with pArray->pData
+    // This sets the output of the plugin to the input array
+    pScratch = pArray;
+
+    // If we are manipulating the image/output, we allocate a new scratch frame
+    // You will need to specify dimensions, and data type.
+
+    //pScratch = pNDArrayPool->alloc(ndims, dims, dataType, 0, NULL
+    //if(pScratch == NULL){
+    //    ERR("Unable to allocate frame.")
+    //    return;
+    //}
+    
+
+    // Process the image here. pArray is read only, and if any image manipulation is required
+    // a copy should be made into pScratch.
+    // 
+    // Note that this expects any external libraries to be thread safe. If they aren't, move
+    // the processing to after this->lock();
+    //
+    // Access data with pArray->pData.
     // DO NOT CALL pArray.release()
-    // If used, call pScratch.release()
-    // use doCallbacksGenericPointer with pScratch to pass processed image to plugin array port
 
     this->lock();
 
+    // If pScratch was allocated, set the color mode and unique ID attributes here.
+
+    //pScratch->pAttributeList->add("ColorMode", "Color Mode", NDAttrInt32, &colorMode);
+    //pScratch->uniqueId = pArray->uniqueId;
+
     if(status == asynError){
-        asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s Error, image not processed correctly\n", pluginName, functionName);
+        ERR("Image not processed correctly!");
         return;
     }
 
-    // This call can push the pScratch array to callbacks for other plugins. If this is required, enter false, true as the two other arguments.
-    NDPluginDriver::endProcessCallbacks(pScratch, false, false);
+    NDPluginDriver::endProcessCallbacks(pScratch, false, performCallbacks);
+
+    // If pScratch was allocated in this function, make sure to release it.
+    // pScratch.release()
 
     callParamCallbacks();
 }
@@ -110,7 +165,8 @@ void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
 
 
 //constructror from base class, replace with your plugin name
-NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(const char *portName, int queueSize, int blockingCallbacks,
+NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(
+        const char *portName, int queueSize, int blockingCallbacks,
         const char *NDArrayPort, int NDArrayAddr,
         int maxBuffers, size_t maxMemory,
         int priority, int stackSize, int maxThreads)
@@ -124,12 +180,13 @@ NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(c
 
     char versionString[25];
 
-    // Create PV parameters here
-    // EXAMPLE:
-    // createParam(PVString, 	asynParamOctet, 	&PVIndex);  -> string and waveform records
-    // createParam(PVString, 	asynParamInt32, 	&PVIndex);  -> int records
-    // createParam(PVString, 	asynParamFloat64, 	&PVIndex);  -> float records
+    // Initialize Parameters here, using the string vals and indexes from the header. Ex:
+    // createParam(NDPlugin{{ cookiecutter.plugin_name }}OctetString, 	asynParamOctet, 	&NDPlugin{{ cookiecutter.plugin_name }}Octet);  -> asynParamOctet records (stringin, stringout, waveform) 
+    // createParam(NDPlugin{{ cookiecutter.plugin_name }}IntegerString, 	asynParamInt32, 	&NDPlugin{{ cookiecutter.plugin_name }}Integer);  -> asynInt32 records (bo, bi, mbbo, mbbi, ao, ai)
+    // createParam(NDPlugin{{ cookiecutter.plugin_name }}FloatString, 	asynParamFloat64, 	&NDPlugin{{ cookiecutter.plugin_name }}Float);  -> asynParamFloat64 records (ao, ai, waveform) 
 
+
+    // Set some basic plugin info Params
     setStringParam(NDPluginDriverPluginType, "NDPlugin{{ cookiecutter.plugin_name }}");
     epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", {{ cookiecutter.plugin_name.upper() }}_VERSION, {{ cookiecutter.plugin_name.upper() }}_REVISION, {{ cookiecutter.plugin_name.upper() }}_MODIFICATION);
     setStringParam(NDDriverVersion, versionString);
@@ -144,47 +201,49 @@ NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(c
  * 
  * @params[in]	-> all passed to constructor
  */
-extern "C" int ND{{ cookiecutter.plugin_name }}Configure(const char *portName, int queueSize, int blockingCallbacks,
+extern "C" int ND{{ cookiecutter.plugin_name }}Configure(
+        const char *portName, int queueSize, int blockingCallbacks,
         const char *NDArrayPort, int NDArrayAddr,
         int maxBuffers, size_t maxMemory,
         int priority, int stackSize, int maxThreads){
 
-    NDPlugin{{ cookiecutter.plugin_name }} *pPlugin = new NDPlugin{{ cookiecutter.plugin_name }}(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
-        maxBuffers, maxMemory, priority, stackSize, maxThreads);
+    // Initialize instance of our plugin and start it.
+    NDPlugin{{ cookiecutter.plugin_name }} *pPlugin = new NDPlugin{{ cookiecutter.plugin_name }}(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr, maxBuffers, maxMemory, priority, stackSize, maxThreads);
     return pPlugin->start();
 }
 
 
 /* IOC shell arguments passed to the plugin configure function */
-static const iocshArg initArg0 = { "portName",iocshArgString};
-static const iocshArg initArg1 = { "frame queue size",iocshArgInt};
-static const iocshArg initArg2 = { "blocking callbacks",iocshArgInt};
-static const iocshArg initArg3 = { "NDArrayPort",iocshArgString};
-static const iocshArg initArg4 = { "NDArrayAddr",iocshArgInt};
-static const iocshArg initArg5 = { "maxBuffers",iocshArgInt};
-static const iocshArg initArg6 = { "maxMemory",iocshArgInt};
-static const iocshArg initArg7 = { "priority",iocshArgInt};
-static const iocshArg initArg8 = { "stackSize",iocshArgInt};
-static const iocshArg initArg9 = { "maxThreads",iocshArgInt};
+static const iocshArg initArg0 = { "portName", iocshArgString };
+static const iocshArg initArg1 = { "frame queue size", iocshArgInt };
+static const iocshArg initArg2 = { "blocking callbacks", iocshArgInt };
+static const iocshArg initArg3 = { "NDArrayPort", iocshArgString };
+static const iocshArg initArg4 = { "NDArrayAddr", iocshArgInt };
+static const iocshArg initArg5 = { "maxBuffers", iocshArgInt };
+static const iocshArg initArg6 = { "maxMemory", iocshArgInt };
+static const iocshArg initArg7 = { "priority", iocshArgInt };
+static const iocshArg initArg8 = { "stackSize", iocshArgInt };
+static const iocshArg initArg9 = { "maxThreads", iocshArgInt };
 static const iocshArg * const initArgs[] = {&initArg0,
-                &initArg1,
-                &initArg2,
-                &initArg3,
-                &initArg4,
-                &initArg5,
-                &initArg6,
-                &initArg7,
-                &initArg8,
-                &initArg9};
+                                            &initArg1,
+                                            &initArg2,
+                                            &initArg3,
+                                            &initArg4,
+                                            &initArg5,
+                                            &initArg6,
+                                            &initArg7,
+                                            &initArg8,
+                                            &initArg9};
 
 
 // Define the path to your plugin's extern configure function above
-static const iocshFuncDef initFuncDef = {"ND{{ cookiecutter.plugin_name }}Configure",10,initArgs};
+static const iocshFuncDef initFuncDef = { "ND{{ cookiecutter.plugin_name }}Configure", 10, initArgs };
 
 
 /* link the configure function with the passed args, and call it from the IOC shell */
 static void initCallFunc(const iocshArgBuf *args){
-    ND{{ cookiecutter.plugin_name }}Configure(args[0].sval, args[1].ival, args[2].ival,
+    ND{{ cookiecutter.plugin_name }}Configure(
+            args[0].sval, args[1].ival, args[2].ival,
             args[3].sval, args[4].ival, args[5].ival,
             args[6].ival, args[7].ival, args[8].ival, args[9].ival);
 }

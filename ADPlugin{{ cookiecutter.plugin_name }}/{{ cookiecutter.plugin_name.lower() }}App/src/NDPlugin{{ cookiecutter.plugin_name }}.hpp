@@ -25,10 +25,10 @@ using namespace std;
 
 
 // Define the PVStrings for all of your PV values here in the following format
-//#define NDPlugin{{ cookiecutter.plugin_name }}PVNameString 	"PV_STRING" 		//asynOctet
+//#define NDPlugin{{ cookiecutter.plugin_name }}PVNameString 	"{{ cookiecutter.plugin_name.upper() }}_PVNAME" 		//DTYP (ex. asynInt32, asynFloat64, asynOctet)
 
 
-// define all necessary structs and enums here
+// Define all necessary tpyes, structs, and enums here
 
 
 /* Plugin class, extends plugin driver */
@@ -45,11 +45,13 @@ class NDPlugin{{ cookiecutter.plugin_name }} : public NDPluginDriver {
 
     protected:
 
-        //in this section i define the coords of database vals
+        // Define the Param index variables here. Ex:
+        // int NDPlugin{{ cookiecutter.plugin_name }}PVName;
 
-        //Place PV indexes here, define first and last as appropriate, replace PLUGINNAME with name, 
-        #define ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM FIRSTPVINDEX
-        #define ND_{{ cookiecutter.plugin_name.upper() }}_LAST_PARAM LASTPVINDEX
+
+        // Define these two variables as the first and last param indexes.
+        #define ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM 0
+        #define ND_{{ cookiecutter.plugin_name.upper() }}_LAST_PARAM 0 
 
     private:
 
@@ -59,7 +61,7 @@ class NDPlugin{{ cookiecutter.plugin_name }} : public NDPluginDriver {
 
 };
 
-// Replace PLUGINNAME with plugin name ex. BAR
+// Def that computes the number of params specific to the plugin
 #define NUM_{{ cookiecutter.plugin_name.upper() }}_PARAMS ((int)(&ND_{{ cookiecutter.plugin_name.upper() }}_LAST_PARAM - &ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM + 1))
 
 #endif
