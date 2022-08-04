@@ -36,7 +36,7 @@ class NDPlugin{{ cookiecutter.plugin_name }} : public NDPluginDriver {
     public:
         NDPlugin{{ cookiecutter.plugin_name }}(const char *portName, int queueSize, int blockingCallbacks,
             const char* NDArrayPort, int NDArrayAddr, int maxBuffers,
-            size_t maxMemory, int priority, int stackSize);
+            size_t maxMemory, int priority, int stackSize, int maxThreads);
 
 
         void processCallbacks(NDArray *pArray);
