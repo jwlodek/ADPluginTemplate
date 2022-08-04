@@ -13,7 +13,7 @@ endif
 
 DBD += NDPlugin{{ cookiecutter.plugin_name }}.dbd
 
-INC += NDPlugin{{ cookiecutter.plugin_name }}.h
+INC += NDPlugin{{ cookiecutter.plugin_name }}.hpp
 
 LIBRARY_IOC += NDPlugin{{ cookiecutter.plugin_name }}
 
