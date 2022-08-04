@@ -1,3 +1,3 @@
-# ADPlugin{{ cookiecutter.plugin\_name }}
+# ADPlugin{{ cookiecutter.plugin_name }}
 
-AreaDetector plugin that adds support for {{ cookiecutter.plugin\_name.lower() }}
+AreaDetector plugin that adds support for {{ cookiecutter.plugin_name.lower() }}
