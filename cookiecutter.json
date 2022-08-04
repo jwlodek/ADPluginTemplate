@@ -1,4 +1,5 @@
 {
     "author": "First and Last Name",
-    "plugin_name": "Name of the plugin, capitalized. ex. HDF5, Transform, ColorCorrect..."
+    "plugin_name": "Name of the plugin, capitalized. ex. HDF5, Transform, ColorCorrect...",
+    "plugin_acronym": "Shorthand name of the plugin, up to three characters"
 }
