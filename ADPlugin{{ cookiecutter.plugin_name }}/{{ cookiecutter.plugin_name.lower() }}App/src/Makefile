@@ -1,5 +1,3 @@
-#Author: 
-
 TOP=../..
 include $(TOP)/configure/CONFIG
 #----------------------------------------
@@ -13,13 +11,13 @@ ifeq (vxWorks,$(findstring vxWorks, $(T_A)))
     CODE_CXXFLAGS=
 endif
 
-DBD += NDPluginPLUGINNAMESTANDARD.dbd
+DBD += NDPlugin{{ cookiecutter.plugin_name }}.dbd
 
-INC += NDPluginPLUGINNAMESTANDARD.h
+INC += NDPlugin{{ cookiecutter.plugin_name }}.h
 
-LIBRARY_IOC += NDPluginPLUGINNAMESTANDARD
+LIBRARY_IOC += NDPlugin{{ cookiecutter.plugin_name }}
 
-NDPluginPLUGINNAMESTANDARD_SRCS += NDPluginPLUGINNAMESTANDARD.cpp
+NDPlugin{{ cookiecutter.plugin_name }}_SRCS += NDPlugin{{ cookiecutter.plugin_name }}.cpp
 
 include $(AREA_DETECTOR)/ADCore/ADApp/commonLibraryMakefile
 

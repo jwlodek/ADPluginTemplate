@@ -3,22 +3,22 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>ADPluginPLUGINNAMESTANDARD Documentation</title>
+    <title>ADPlugin{{ cookiecutter.plugin_name }} Documentation</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
-    <h1 style="font-size: 40px">ADPluginPLUGINNAMESTANDARD Documentation</h1>
+    <h1 style="font-size: 40px">ADPlugin{{ cookiecutter.plugin_name }} Documentation</h1>
     <h3>Author: </h3>
     <h3>Corresponding Author: </h3>
     <hr/>
     <h3>Installing the plugin</h3>
-    <p>The ADPluginPLUGINNAMESTANDARD plugin depends on several external libraries. These include:</p>
+    <p>The ADPlugin{{ cookiecutter.plugin_name }} plugin depends on several external libraries. These include:</p>
     <ul>
         <li>EPICS, Area Detector, and their submodules, all of whuch can be found on github.</li>
     </ul>
     <p>Further installation instructions are located in the README.md file in the top level of this repository.</p>
     <hr/>
-    <h3>Using ADPluginPLUGINNAMESTANDARD</h3>
+    <h3>Using ADPlugin{{ cookiecutter.plugin_name }}</h3>
 
     <hr/>
     <h3>Release Notes</h3>
@@ -31,9 +31,9 @@
     <h3>Code Documentation</h3>
 
     
-    <h5>ADPluginPLUGINNAMESTANDARD File structure</h5>
-    <img src="screenshots/fileStructure.png" width="400" height="auto" alt="ADPluginPLUGINNAMESTANDARD file structure" />
-    <p>All of the plugin Source code is housed in the PLUGINNAMELOWERApp/src directory.</p>
+    <h5>ADPlugin{{ cookiecutter.plugin_name }} File structure</h5>
+    <img src="screenshots/fileStructure.png" width="400" height="auto" alt="ADPlugin{{ cookiecutter.plugin_name }} file structure" />
+    <p>All of the plugin Source code is housed in the {{ cookiecutter.plugin_name.lower() }}App/src directory.</p>
 
     <p>More detailed documentation can be found in the plugin Src.</p>
 

@@ -3,8 +3,8 @@
  * You must implement all of the functions already listed here along with any 
  * additional plugin specific functions you require.
  * 
- * Author:
- * Created on:
+ * Author: {{ cookiecutter.author }}
+ * Created on: {% now 'local', '%m/%d/%Y' %}
  * 
  */
 
@@ -24,7 +24,7 @@
 #include <iocsh.h>
 #include "NDArray.h"
 // Include your plugin's header file here
-#include "NDPluginPLUGINNAMESTANDARD.h"
+#include "NDPlugin{{ cookiecutter.plugin_name }}.h"
 #include <epicsExport.h>
 
 // include your external dependency libraries here
@@ -35,7 +35,7 @@ using namespace std;
 
 
 // Name your plugin
-static const char *pluginName="NDPluginPLUGINNAMESTANDARD";
+static const char *pluginName="NDPlugin{{ cookiecutter.plugin_name }}";
 
 
 
@@ -46,7 +46,7 @@ static const char *pluginName="NDPluginPLUGINNAMESTANDARD";
  * @params[in]: value		-> value PV was set to
  * @return: success if PV was updated correctly, otherwise error
  */
-asynStatus NDPluginPLUGINNAMESTANDARD::writeInt32(asynUser* pasynUser, epicsInt32 value){
+asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUser, epicsInt32 value){
     const char* functionName = "writeInt32";
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
@@ -55,7 +55,7 @@ asynStatus NDPluginPLUGINNAMESTANDARD::writeInt32(asynUser* pasynUser, epicsInt3
     asynPrint(this->pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s::%s function = %d value=%d\n", pluginName, functionName, function, value);
 
     // replace PLUGINNAME with your plugin (ex. BAR)
-    if(function < ND_PLUGINNAMEUPPER_FIRST_PARAM){
+    if(function < ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM){
         status = NDPluginDriver::writeInt32(pasynUser, value);
     }
     callParamCallbacks();
@@ -73,7 +73,7 @@ asynStatus NDPluginPLUGINNAMESTANDARD::writeInt32(asynUser* pasynUser, epicsInt3
  * @params[in]: pArray -> NDArray recieved by the plugin from the camera
  * @return: void
 */
-void NDPluginPLUGINNAMESTANDARD::processCallbacks(NDArray *pArray){
+void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
     static const char* functionName = "processCallbacks";
     NDArray *pScratch;
     asynStatus status = asynSuccess;
@@ -98,7 +98,7 @@ void NDPluginPLUGINNAMESTANDARD::processCallbacks(NDArray *pArray){
 
     if(status == asynError){
         asynPrint(this->pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s Error, image not processed correctly\n", pluginName, functionName);
-    return;
+        return;
     }
 
     // This call can push the pScratch array to callbacks for other plugins. If this is required, enter false, true as the two other arguments.
@@ -110,7 +110,7 @@ void NDPluginPLUGINNAMESTANDARD::processCallbacks(NDArray *pArray){
 
 
 //constructror from base class, replace with your plugin name
-NDPluginPLUGINNAMESTANDARD::NDPluginPLUGINNAMESTANDARD(const char *portName, int queueSize, int blockingCallbacks,
+NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(const char *portName, int queueSize, int blockingCallbacks,
         const char *NDArrayPort, int NDArrayAddr,
         int maxBuffers, size_t maxMemory,
         int priority, int stackSize, int maxThreads)
@@ -130,8 +130,8 @@ NDPluginPLUGINNAMESTANDARD::NDPluginPLUGINNAMESTANDARD(const char *portName, int
     // createParam(PVString, 	asynParamInt32, 	&PVIndex);  -> int records
     // createParam(PVString, 	asynParamFloat64, 	&PVIndex);  -> float records
 
-    setStringParam(NDPluginDriverPluginType, "NDPluginPLUGINNAMESTANDARD");
-    epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", PLUGINNAMEUPPER_VERSION, PLUGINNAMEUPPER_REVISION, PLUGINNAMEUPPER_MODIFICATION);
+    setStringParam(NDPluginDriverPluginType, "NDPlugin{{ cookiecutter.plugin_name }}");
+    epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", {{ cookiecutter.plugin_name.upper() }}_VERSION, {{ cookiecutter.plugin_name.upper() }}_REVISION, {{ cookiecutter.plugin_name.upper() }}_MODIFICATION);
     setStringParam(NDDriverVersion, versionString);
     connectToArrayPort();
 }
@@ -144,12 +144,12 @@ NDPluginPLUGINNAMESTANDARD::NDPluginPLUGINNAMESTANDARD(const char *portName, int
  * 
  * @params[in]	-> all passed to constructor
  */
-extern "C" int NDPLUGINNAMESTANDARDConfigure(const char *portName, int queueSize, int blockingCallbacks,
+extern "C" int ND{{ cookiecutter.plugin_name }}Configure(const char *portName, int queueSize, int blockingCallbacks,
         const char *NDArrayPort, int NDArrayAddr,
         int maxBuffers, size_t maxMemory,
         int priority, int stackSize, int maxThreads){
 
-    NDPluginPLUGINNAMESTANDARD *pPlugin = new NDPluginPLUGINNAMESTANDARD(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
+    NDPlugin{{ cookiecutter.plugin_name }} *pPlugin = new NDPlugin{{ cookiecutter.plugin_name }}(portName, queueSize, blockingCallbacks, NDArrayPort, NDArrayAddr,
         maxBuffers, maxMemory, priority, stackSize, maxThreads);
     return pPlugin->start();
 }
@@ -179,24 +179,24 @@ static const iocshArg * const initArgs[] = {&initArg0,
 
 
 // Define the path to your plugin's extern configure function above
-static const iocshFuncDef initFuncDef = {"NDPLUGINNAMESTANDARDConfigure",10,initArgs};
+static const iocshFuncDef initFuncDef = {"ND{{ cookiecutter.plugin_name }}Configure",10,initArgs};
 
 
 /* link the configure function with the passed args, and call it from the IOC shell */
 static void initCallFunc(const iocshArgBuf *args){
-    NDPLUGINNAMESTANDARDConfigure(args[0].sval, args[1].ival, args[2].ival,
+    ND{{ cookiecutter.plugin_name }}Configure(args[0].sval, args[1].ival, args[2].ival,
             args[3].sval, args[4].ival, args[5].ival,
             args[6].ival, args[7].ival, args[8].ival, args[9].ival);
 }
 
 
 /* function to register the configure function in the IOC shell */
-extern "C" void NDPLUGINNAMESTANDARDRegister(void){
+extern "C" void ND{{ cookiecutter.plugin_name }}Register(void){
     iocshRegister(&initFuncDef,initCallFunc);
 }
 
 
 /* Exports plugin registration */
 extern "C" {
-    epicsExportRegistrar(NDPLUGINNAMESTANDARDRegister);
+    epicsExportRegistrar(ND{{ cookiecutter.plugin_name }}Register);
 }
