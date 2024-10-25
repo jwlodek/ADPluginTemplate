@@ -29,6 +29,6 @@ institution | Institution to which plugin source copyright will be attributed to
 
 Below is an expanding list of plugins built with ADPluginTemplate. If you have made a plugin with it and want it listed here, feel free to make a pull request!
 
-* [ADPluginDmtx](https://github.com/epicsNSLS2-areaDetector/ADPluginDmtx) - A data matrix barcode reader
+* [ADPluginDmtx](https://github.com/jwlodek/ADPluginDmtx) - A data matrix barcode reader
 * [ADPluginTimelapse](https://github.com/epicsNSLS2-areaDetector/ADPluginTimelapse) - A timelapse video generator for areaDetector (Still under development)
 * [ADPluginArrow](https://github.com/NSLS2/ADPluginArrow) - A (currently experimental) plugin for integrating areaDetector with Apache Arrow data structures.
