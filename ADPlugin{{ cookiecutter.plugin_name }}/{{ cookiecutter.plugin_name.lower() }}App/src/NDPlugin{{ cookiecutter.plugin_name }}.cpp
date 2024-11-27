@@ -89,7 +89,7 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUse
     }
     callParamCallbacks();
     if(status){
-        ERR_ARGS("Failed to wrote Int32 val to PV: function = %d value=%d", function, value);
+        ERR_ARGS("Failed to write int32 val to parameter: function = %d value=%d", function, value);
     }
     return status;
 }
@@ -126,7 +126,7 @@ void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
     // If we are manipulating the image/output, we allocate a new scratch frame
     // You will need to specify dimensions, and data type.
 
-    //pScratch = pNDArrayPool->alloc(ndims, dims, dataType, 0, NULL
+    //pScratch = pNDArrayPool->alloc(ndims, dims, dataType, 0, NULL);
     //if(pScratch == NULL){
     //    ERR("Unable to allocate frame.")
     //    return;
