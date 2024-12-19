@@ -75,8 +75,6 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUse
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
 
-    LOG_ARGS("function = %d value=%d", function, value);
-
     // TODO: Handle callbacks for any integer PV writes as needed here
 
     status = setIntegerParam(function, value);
@@ -89,6 +87,38 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUse
 
     if(status){
         ERR_ARGS("Failed to write int32 val to parameter: function = %d value=%d", function, value);
+    }
+
+    return status;
+}
+
+
+/**
+ * Override of NDPluginDriver function. Must be implemented by your plugin
+ *
+ * Performs callback when write operation is performed on an asynFloat64 record
+ * 
+ * @params[in]: pasynUser   -> pointer to asyn User that initiated the transaction
+ * @params[in]: value       -> value PV was set to
+ * @return: success if PV was updated correctly, otherwise error
+ */
+asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeFloat64(asynUser* pasynUser, epicsFloat64 value){
+    const char* functionName = "writeFloat64";
+    int function = pasynUser->reason;
+    asynStatus status = asynSuccess;
+
+    // TODO: Handle callbacks for any integer PV writes as needed here
+
+    status = setDoubleParam(function, value);
+
+    if(function < ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM){
+        status = NDPluginDriver::writeFloat64(pasynUser, value);
+    }
+
+    callParamCallbacks();
+
+    if(status){
+        ERR_ARGS("Failed to write float64 val to parameter: function = %d value=%f", function, value);
     }
 
     return status;
