@@ -23,8 +23,8 @@ using namespace std;
 
 
 
-// Define the PVStrings for all of your PV values here in the following format
-//#define NDPlugin{{ cookiecutter.plugin_name }}PVNameString    "{{ cookiecutter.plugin_name.upper() }}_PVNAME"  //DTYP (ex. asynInt32, asynFloat64, asynOctet)
+// Define the strings that map your records to params here
+#define NDPlugin{{ cookiecutter.plugin_name }}StatusString    "{{ cookiecutter.plugin_acronym }}_STATUS"  //asynInt32
 
 
 /* Plugin class, extends NDPluginDriver base class */
@@ -43,11 +43,10 @@ class NDPlugin{{ cookiecutter.plugin_name }} : public NDPluginDriver {
     protected:
 
         // Define the Param index variables here. Ex:
-        // int NDPlugin{{ cookiecutter.plugin_name }}PVName;
-
+        int NDPlugin{{ cookiecutter.plugin_name }}_Status;
         // Define these two variables as the first and last param indexes.
-        #define ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM 0
-        #define ND_{{ cookiecutter.plugin_name.upper() }}_LAST_PARAM 0 
+        #define ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM NDPlugin{{ cookiecutter.plugin_name }}_Status
+        #define ND_{{ cookiecutter.plugin_name.upper() }}_LAST_PARAM NDPlugin{{ cookiecutter.plugin_name }}_Status
 
     private:
 

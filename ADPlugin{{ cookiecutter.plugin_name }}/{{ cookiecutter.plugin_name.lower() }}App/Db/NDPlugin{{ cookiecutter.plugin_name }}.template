@@ -17,9 +17,20 @@ include "NDPluginBase.template"
 # Consult other .template files for guides on how to write specific PVs
 #
 # The PV_NAME at the end of the INP or OUT field of the record is the 
-# PVString defined in NDPluginPLUGINNAMESTANDARD.h.
+# PVString defined in NDPlugin{{ cookiecutter.plugin_name }}.h.
 #
-# example: #define NDPluginPLUGINNAMESTANDARDPVNameString "PV_NAME"
+# example: #define NDPlugin{{ cookiecutter.plugin_name }}PVNameString "PV_NAME"
 #
 ##################################################################
+
+record(bi, "$(P)$(R){{ cookiecutter.plugin_name }}Status_RBV"){
+    field(DTYP, "asynInt32")
+    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT)){{ cookiecutter.plugin_acronym }}_STATUS")
+    field(ZRVL, "0")
+    field(ZRST, "No Error")
+    field(ONVL, "1")
+    field(ONST, "Error")
+    field(VAL, "0")
+    field(SCAN, "I/O Intr")
+}
 

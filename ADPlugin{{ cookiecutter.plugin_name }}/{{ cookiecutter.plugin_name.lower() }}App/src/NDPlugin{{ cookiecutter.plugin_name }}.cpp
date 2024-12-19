@@ -215,13 +215,7 @@ NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(
     char versionString[25];
 
     // Initialize Parameters here, using the string vals and indexes from the header. Ex:
-    // For asynOctet records (stringin, stringout, waveform)
-    // createParam(NDPlugin{{ cookiecutter.plugin_name }}OctetString,   asynParamOctet,   &NDPlugin{{ cookiecutter.plugin_name }}Octet);
-    // For asynInt32 records (bo, bi, mbbo, mbbi, ao, ai)
-    // createParam(NDPlugin{{ cookiecutter.plugin_name }}IntegerString, asynParamInt32,   &NDPlugin{{ cookiecutter.plugin_name }}Integer);
-    // For asynFloat64 records (ao, ai, waveform)
-    // createParam(NDPlugin{{ cookiecutter.plugin_name }}FloatString,   asynParamFloat64, &NDPlugin{{ cookiecutter.plugin_name }}Float);
-
+    createParam(NDPlugin{{ cookiecutter.plugin_name }}StatusString, asynParamInt32,   &NDPlugin{{ cookiecutter.plugin_name }}_Status);
 
     // Update plugin version number parameter
     setStringParam(NDPluginDriverPluginType, "NDPlugin{{ cookiecutter.plugin_name }}");
