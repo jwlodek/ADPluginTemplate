@@ -41,12 +41,12 @@
     asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: " fmt "\n", pluginName, \
               functionName, __VA_ARGS__);
 
-// Log message formatters
+// Log message formatters (set to use ERROR level by default they are printed w/ default trace settings.)
 #define LOG(msg) \
-    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s::%s: %s\n", pluginName, functionName, msg)
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s: %s\n", pluginName, functionName, msg)
 
 #define LOG_ARGS(fmt, ...)                                                                       \
-    asynPrint(pasynUserSelf, ASYN_TRACEIO_DRIVER, "%s::%s: " fmt "\n", pluginName, functionName, \
+    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s: " fmt "\n", pluginName, functionName, \
               __VA_ARGS__);
 
 
@@ -116,6 +116,8 @@ void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
     NDPluginDriver::beginProcessCallbacks(pArray);
 
     pArray->getInfo(&arrayInfo);
+
+    LOG_ARGS("Processing frame w/ ID %d", pArray->uniqueId);
 
     //unlock the mutex for the processing portion
     this->unlock();
@@ -199,6 +201,8 @@ NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(
     setStringParam(NDDriverVersion, versionString);
 
     connectToArrayPort();
+
+    LOG_ARGS("Initialization complete. Version: %s", versionString);
 }
 
 
