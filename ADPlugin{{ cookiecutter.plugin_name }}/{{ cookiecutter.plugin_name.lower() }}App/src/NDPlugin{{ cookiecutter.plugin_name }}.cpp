@@ -1,31 +1,27 @@
 /**
- * This file is a basic template for implementing areaDetector plugins.
- * You must implement all of the functions already listed here along with any 
- * additional plugin specific functions you require.
+ * A basic template for implementing areaDetector plugins.
  * 
  * Author: {{ cookiecutter.author }}
  * Created on: {% now 'local', '%m/%d/%Y' %}
  * 
  */
 
-
-
-//include some standard libraries
+// Standard library headers
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include <iostream>
 #include <stdio.h>
 
 
-//include epics/area detector libraries
+// EPICS/AreaDetector headers
 #include <epicsMutex.h>
 #include <epicsString.h>
 #include <iocsh.h>
 #include "NDArray.h"
-// Include your plugin's header file here
-#include "NDPlugin{{ cookiecutter.plugin_name }}.hpp"
 #include <epicsExport.h>
+
+// Plugin header
+#include "NDPlugin{{ cookiecutter.plugin_name }}.hpp"
 
 
 // Error message formatters
@@ -70,8 +66,8 @@ static const char *pluginName="NDPlugin{{ cookiecutter.plugin_name }}";
  *
  * Performs callback when write operation is performed on an asynInt32 record
  * 
- * @params[in]: pasynUser	-> pointer to asyn User that initiated the transaction
- * @params[in]: value		-> value PV was set to
+ * @params[in]: pasynUser   -> pointer to asyn User that initiated the transaction
+ * @params[in]: value       -> value PV was set to
  * @return: success if PV was updated correctly, otherwise error
  */
 asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUser, epicsInt32 value){
@@ -79,18 +75,22 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUse
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
 
-    status = setIntegerParam(function, value);
     LOG_ARGS("function = %d value=%d", function, value);
 
-    // TODO: Handle callbacks for any integer param write ops
-    
+    // TODO: Handle callbacks for any integer PV writes as needed here
+
+    status = setIntegerParam(function, value);
+
     if(function < ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM){
         status = NDPluginDriver::writeInt32(pasynUser, value);
     }
+
     callParamCallbacks();
+
     if(status){
         ERR_ARGS("Failed to write int32 val to parameter: function = %d value=%d", function, value);
     }
+
     return status;
 }
 
@@ -144,10 +144,11 @@ void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
 
     this->lock();
 
-    // If pScratch was allocated, set the color mode and unique ID attributes here.
+    // If pScratch was allocated, set the color mode, unique ID, and timestamp here.
 
     //pScratch->pAttributeList->add("ColorMode", "Color Mode", NDAttrInt32, &colorMode);
     //pScratch->uniqueId = pArray->uniqueId;
+    //pScratch->epicsTS = pArray->epicsTS;
 
     if(status == asynError){
         ERR("Image not processed correctly!");
@@ -181,15 +182,22 @@ NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(
     char versionString[25];
 
     // Initialize Parameters here, using the string vals and indexes from the header. Ex:
-    // createParam(NDPlugin{{ cookiecutter.plugin_name }}OctetString, 	asynParamOctet, 	&NDPlugin{{ cookiecutter.plugin_name }}Octet);  -> asynParamOctet records (stringin, stringout, waveform) 
-    // createParam(NDPlugin{{ cookiecutter.plugin_name }}IntegerString, 	asynParamInt32, 	&NDPlugin{{ cookiecutter.plugin_name }}Integer);  -> asynInt32 records (bo, bi, mbbo, mbbi, ao, ai)
-    // createParam(NDPlugin{{ cookiecutter.plugin_name }}FloatString, 	asynParamFloat64, 	&NDPlugin{{ cookiecutter.plugin_name }}Float);  -> asynParamFloat64 records (ao, ai, waveform) 
+    // For asynOctet records (stringin, stringout, waveform)
+    // createParam(NDPlugin{{ cookiecutter.plugin_name }}OctetString,   asynParamOctet,   &NDPlugin{{ cookiecutter.plugin_name }}Octet);
+    // For asynInt32 records (bo, bi, mbbo, mbbi, ao, ai)
+    // createParam(NDPlugin{{ cookiecutter.plugin_name }}IntegerString, asynParamInt32,   &NDPlugin{{ cookiecutter.plugin_name }}Integer);
+    // For asynFloat64 records (ao, ai, waveform)
+    // createParam(NDPlugin{{ cookiecutter.plugin_name }}FloatString,   asynParamFloat64, &NDPlugin{{ cookiecutter.plugin_name }}Float);
 
 
-    // Set some basic plugin info Params
+    // Update plugin version number parameter
     setStringParam(NDPluginDriverPluginType, "NDPlugin{{ cookiecutter.plugin_name }}");
-    epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", {{ cookiecutter.plugin_name.upper() }}_VERSION, {{ cookiecutter.plugin_name.upper() }}_REVISION, {{ cookiecutter.plugin_name.upper() }}_MODIFICATION);
+    epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", 
+                  {{ cookiecutter.plugin_name.upper() }}_VERSION, 
+                  {{ cookiecutter.plugin_name.upper() }}_REVISION, 
+                  {{ cookiecutter.plugin_name.upper() }}_MODIFICATION);
     setStringParam(NDDriverVersion, versionString);
+
     connectToArrayPort();
 }
 
