@@ -180,6 +180,7 @@ NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(
         asynInt32ArrayMask | asynFloat64ArrayMask | asynGenericPointerMask,
         ASYN_MULTIDEVICE, 1, priority, stackSize, maxThreads)
 {
+    const char* functionName = "NDPlugin{{ cookiecutter.plugin_name }}";
 
     char versionString[25];
 
