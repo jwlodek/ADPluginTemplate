@@ -160,7 +160,7 @@ void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
     //pScratch = pNDArrayPool->alloc(ndims, dims, dataType, 0, NULL);
 
     if(pScratch == NULL){
-        ERR("Unable to allocate frame.")
+        ERR("Unable to allocate frame.");
         return;
     }
 
