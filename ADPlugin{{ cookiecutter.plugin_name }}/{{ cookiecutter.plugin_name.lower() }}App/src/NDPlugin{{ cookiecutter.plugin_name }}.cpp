@@ -153,20 +153,18 @@ void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
     this->unlock();
 
     // This sets the output of the plugin to the input array
-    pScratch = pArray;
+    pScratch = this->pNDArrayPool->copy(pArray, NULL, 1);
 
-    // If we are manipulating the image/output, we allocate a new scratch frame
+    // If we are manipulating the image/output, we allocate a new scratch frame instead of copying.
     // You will need to specify dimensions, and data type.
-
     //pScratch = pNDArrayPool->alloc(ndims, dims, dataType, 0, NULL);
-    //if(pScratch == NULL){
-    //    ERR("Unable to allocate frame.")
-    //    return;
-    //}
-    
 
-    // Process the image here. pArray is read only, and if any image manipulation is required
-    // a copy should be made into pScratch.
+    if(pScratch == NULL){
+        ERR("Unable to allocate frame.")
+        return;
+    }
+
+    // Process the image here.
     // 
     // Note that this expects any external libraries to be thread safe. If they aren't, move
     // the processing to after this->lock();
@@ -187,10 +185,8 @@ void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
         return;
     }
 
-    NDPluginDriver::endProcessCallbacks(pScratch, false, performCallbacks);
-
-    // If pScratch was allocated in this function, make sure to release it.
-    // pScratch.release()
+    if(pScratch != NULL)
+        NDPluginDriver::endProcessCallbacks(pScratch, false, performCallbacks);
 
     callParamCallbacks();
 }

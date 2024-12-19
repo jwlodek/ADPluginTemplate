@@ -26,10 +26,8 @@ include "NDPluginBase.template"
 record(bi, "$(P)$(R){{ cookiecutter.plugin_name }}Status_RBV"){
     field(DTYP, "asynInt32")
     field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT)){{ cookiecutter.plugin_acronym }}_STATUS")
-    field(ZRVL, "0")
-    field(ZRST, "No Error")
-    field(ONVL, "1")
-    field(ONST, "Error")
+    field(ZNAM, "No Error")
+    field(ONAM, "Error")
     field(VAL, "0")
     field(SCAN, "I/O Intr")
 }
