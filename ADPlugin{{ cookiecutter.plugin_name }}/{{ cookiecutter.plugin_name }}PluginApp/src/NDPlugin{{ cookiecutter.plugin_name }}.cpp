@@ -21,44 +21,13 @@
 #include <epicsExport.h>
 
 // Plugin header
-#include "NDPlugin{{ cookiecutter.plugin_name }}.hpp"
-
-
-// Error message formatters
-#define ERR(msg)                                                                                 \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: %s\n", pluginName, functionName, \
-              msg)
-
-#define ERR_ARGS(fmt, ...)                                                              \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "ERROR | %s::%s: " fmt "\n", pluginName, \
-              functionName, __VA_ARGS__);
-
-// Warning message formatters
-#define WARN(msg) \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: %s\n", pluginName, functionName, msg)
-
-#define WARN_ARGS(fmt, ...)                                                            \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "WARN | %s::%s: " fmt "\n", pluginName, \
-              functionName, __VA_ARGS__);
-
-// Log message formatters (set to use ERROR level by default they are printed w/ default trace settings.)
-#define LOG(msg) \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s: %s\n", pluginName, functionName, msg)
-
-#define LOG_ARGS(fmt, ...)                                                                       \
-    asynPrint(pasynUserSelf, ASYN_TRACE_ERROR, "%s::%s: " fmt "\n", pluginName, functionName, \
-              __VA_ARGS__);
-
+#include "NDPlugin{{ cookiecutter.plugin_name }}.h"
 
 // Include your external dependency library headers
 
 
 // Namespaces
 using namespace std;
-
-
-// Name of the plugin
-static const char *pluginName="NDPlugin{{ cookiecutter.plugin_name }}";
 
 
 /**
@@ -71,13 +40,15 @@ static const char *pluginName="NDPlugin{{ cookiecutter.plugin_name }}";
  * @return: success if PV was updated correctly, otherwise error
  */
 asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUser, epicsInt32 value){
-    const char* functionName = "writeInt32";
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
 
+    const char* paramName;
+    getParamName(function, &paramName);
+
     // TODO: Handle callbacks for any integer PV writes as needed here
 
-    status = setIntegerParam(function, value);
+    // status = setIntegerParam(function, value);
 
     if(function < ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM){
         status = NDPluginDriver::writeInt32(pasynUser, value);
@@ -86,7 +57,9 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUse
     callParamCallbacks();
 
     if(status){
-        ERR_ARGS("Failed to write int32 val to parameter: function = %d value=%d", function, value);
+        ERR_ARGS("Failed to write int32 val to parameter: param=%s value=%d", paramName, value);
+    } else {
+        DEBUG_ARGS("Wrote int32 val to parameter: param=%s value=%d", paramName, value);
     }
 
     return status;
@@ -103,13 +76,15 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUse
  * @return: success if PV was updated correctly, otherwise error
  */
 asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeFloat64(asynUser* pasynUser, epicsFloat64 value){
-    const char* functionName = "writeFloat64";
     int function = pasynUser->reason;
     asynStatus status = asynSuccess;
 
+    const char* paramName;
+    getParamName(function, &paramName);
+
     // TODO: Handle callbacks for any integer PV writes as needed here
 
-    status = setDoubleParam(function, value);
+    // status = setDoubleParam(function, value);
 
     if(function < ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM){
         status = NDPluginDriver::writeFloat64(pasynUser, value);
@@ -118,7 +93,9 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeFloat64(asynUser* pasynU
     callParamCallbacks();
 
     if(status){
-        ERR_ARGS("Failed to write float64 val to parameter: function = %d value=%f", function, value);
+        ERR_ARGS("Failed to write float64 val to parameter: param=%s value=%f", paramName, value);
+    } else {
+        DEBUG_ARGS("Wrote float64 val to parameter: param=%s value=%f", paramName, value);
     }
 
     return status;
@@ -133,7 +110,6 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeFloat64(asynUser* pasynU
  * @return: void
 */
 void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
-    static const char* functionName = "processCallbacks";
     NDArray *pScratch;
     asynStatus status = asynSuccess;
     NDArrayInfo arrayInfo;
@@ -147,7 +123,7 @@ void NDPlugin{{ cookiecutter.plugin_name }}::processCallbacks(NDArray *pArray){
 
     pArray->getInfo(&arrayInfo);
 
-    LOG_ARGS("Processing frame w/ ID %d", pArray->uniqueId);
+    DEBUG_ARGS("Processing frame w/ ID %d", pArray->uniqueId);
 
     //unlock the mutex for the processing portion
     this->unlock();
@@ -206,12 +182,10 @@ NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(
         asynInt32ArrayMask | asynFloat64ArrayMask | asynGenericPointerMask,
         ASYN_MULTIDEVICE, 1, priority, stackSize, maxThreads)
 {
-    const char* functionName = "NDPlugin{{ cookiecutter.plugin_name }}";
 
     char versionString[25];
 
-    // Initialize Parameters here, using the string vals and indexes from the header. Ex:
-    createParam(NDPlugin{{ cookiecutter.plugin_name }}StatusString, asynParamInt32,   &NDPlugin{{ cookiecutter.plugin_name }}_Status);
+    createAllParams();
 
     // Update plugin version number parameter
     setStringParam(NDPluginDriverPluginType, "NDPlugin{{ cookiecutter.plugin_name }}");

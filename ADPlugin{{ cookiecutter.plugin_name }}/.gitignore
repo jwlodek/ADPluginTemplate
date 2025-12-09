@@ -9,4 +9,7 @@ envPaths
 O.*
 *.swp
 .vscode/
-__pycache__/
+__pycache__/# pixi environments
+.pixi/*
+!.pixi/config.toml
+.pixi/

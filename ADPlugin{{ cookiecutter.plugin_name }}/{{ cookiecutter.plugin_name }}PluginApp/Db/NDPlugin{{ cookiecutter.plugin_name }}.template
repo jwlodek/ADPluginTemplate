@@ -1,4 +1,4 @@
-# Author: 
+# Author: {{ cookiecutter.author }}
 
 # include the base driver template file
 include "NDPluginBase.template"
@@ -22,13 +22,3 @@ include "NDPluginBase.template"
 # example: #define NDPlugin{{ cookiecutter.plugin_name }}PVNameString "PV_NAME"
 #
 ##################################################################
-
-record(bi, "$(P)$(R){{ cookiecutter.plugin_name }}Status_RBV"){
-    field(DTYP, "asynInt32")
-    field(INP, "@asyn($(PORT),$(ADDR),$(TIMEOUT)){{ cookiecutter.plugin_acronym }}_STATUS")
-    field(ZNAM, "No Error")
-    field(ONAM, "Error")
-    field(VAL, "0")
-    field(SCAN, "I/O Intr")
-}
-

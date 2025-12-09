@@ -1,0 +1,22 @@
+[workspace]
+authors = ["Jakub Wlodek <jwlodek@bnl.gov>"]
+channels = ["conda-forge"]
+name = "ADPlugin{{ cookiecutter.plugin_name }}"
+platforms = ["linux-64"]
+version = "0.1.0"
+
+[tasks]
+lint = "pre-commit run --all-files"
+make-paramdefs = "dbtools-gen-paramdefs {{ cookiecutter.plugin_name.lower() }}App/Db {{ cookiecutter.plugin_name.lower() }}App/src"
+make-bobfiles = "epicsdb2bob {{ cookiecutter.plugin_name.lower() }}App/Db {{ cookiecutter.plugin_name.lower() }}App/op/bob -d -r _RBV -t none"
+
+[dependencies]
+phoebusgen = ">=3.1.0,<4"
+pre-commit = ">=4.3.0,<5"
+ruff = ">=0.14.0,<0.15"
+pip = ">=25.2,<26"
+python = ">=3.12.12,<3.13"
+
+[pypi-dependencies]
+epicsdbtools = { git = "https://github.com/jwlodek/epicsdbtools.git" }
+epicsdb2bob = { git = "https://github.com/NSLS2/epicsdb2bob.git" }
