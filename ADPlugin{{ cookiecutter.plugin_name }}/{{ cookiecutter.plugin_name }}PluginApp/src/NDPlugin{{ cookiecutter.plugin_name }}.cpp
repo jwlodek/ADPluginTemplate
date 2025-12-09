@@ -50,7 +50,7 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeInt32(asynUser* pasynUse
 
     // status = setIntegerParam(function, value);
 
-    if(function < ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM){
+    if(function < NDPLUGIN{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM){
         status = NDPluginDriver::writeInt32(pasynUser, value);
     }
 
@@ -86,7 +86,7 @@ asynStatus NDPlugin{{ cookiecutter.plugin_name }}::writeFloat64(asynUser* pasynU
 
     // status = setDoubleParam(function, value);
 
-    if(function < ND_{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM){
+    if(function < NDPLUGIN{{ cookiecutter.plugin_name.upper() }}_FIRST_PARAM){
         status = NDPluginDriver::writeFloat64(pasynUser, value);
     }
 
@@ -190,14 +190,14 @@ NDPlugin{{ cookiecutter.plugin_name }}::NDPlugin{{ cookiecutter.plugin_name }}(
     // Update plugin version number parameter
     setStringParam(NDPluginDriverPluginType, "NDPlugin{{ cookiecutter.plugin_name }}");
     epicsSnprintf(versionString, sizeof(versionString), "%d.%d.%d", 
-                  {{ cookiecutter.plugin_name.upper() }}_VERSION, 
-                  {{ cookiecutter.plugin_name.upper() }}_REVISION, 
-                  {{ cookiecutter.plugin_name.upper() }}_MODIFICATION);
+                  NDPLUGIN{{ cookiecutter.plugin_name.upper() }}_VERSION, 
+                  NDPLUGIN{{ cookiecutter.plugin_name.upper() }}_REVISION, 
+                  NDPLUGIN{{ cookiecutter.plugin_name.upper() }}_MODIFICATION);
     setStringParam(NDDriverVersion, versionString);
 
     connectToArrayPort();
 
-    LOG_ARGS("Initialization complete. Version: %s", versionString);
+    INFO_ARGS("Initialization complete. Version: %s", versionString);
 }
 
 
