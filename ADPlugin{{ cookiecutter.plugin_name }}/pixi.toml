@@ -7,8 +7,8 @@ version = "0.1.0"
 
 [tasks]
 lint = "pre-commit run --all-files"
-make-paramdefs = "dbtools-gen-paramdefs {{ cookiecutter.plugin_name.lower() }}App/Db {{ cookiecutter.plugin_name.lower() }}App/src"
-make-bobfiles = "epicsdb2bob {{ cookiecutter.plugin_name.lower() }}App/Db {{ cookiecutter.plugin_name.lower() }}App/op/bob -d -r _RBV -t none"
+make-paramdefs = "dbtools-gen-paramdefs {{ cookiecutter.plugin_name }}PluginApp/Db {{ cookiecutter.plugin_name }}PluginApp/src"
+make-bobfiles = "epicsdb2bob {{ cookiecutter.plugin_name }}PluginPluginApp/Db {{ cookiecutter.plugin_name }}PluginApp/op/bob -d -r _RBV -t none"
 
 [dependencies]
 phoebusgen = ">=3.1.0,<4"
