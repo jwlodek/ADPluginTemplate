@@ -22,7 +22,6 @@ Variable | Description
 -----|---------------
 author | Your first and last name
 plugin_name | A name for your plugin (ex. Arrow, Barcode, Edge, ColorConvert etc.)
-plugin_acronym | A shorthand name for your plugin (Up to three characters)
 institution | Institution to which plugin source copyright will be attributed to.
 
 ### Current Plugins Developed with ADPluginTemplate
