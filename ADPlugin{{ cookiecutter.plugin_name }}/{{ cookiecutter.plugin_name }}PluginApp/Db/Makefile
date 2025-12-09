@@ -6,6 +6,7 @@ include $(TOP)/configure/CONFIG
 #DB_OPT=YES
 
 DB+=NDPlugin{{ cookiecutter.plugin_name }}.template
+DB+=NDPlugin{{ cookiecutter.plugin_name }}_settings.req
 
 
 include $(TOP)/configure/RULES
