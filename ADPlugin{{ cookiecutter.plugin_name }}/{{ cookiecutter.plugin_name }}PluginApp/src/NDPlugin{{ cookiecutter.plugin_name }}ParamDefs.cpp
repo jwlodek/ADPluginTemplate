@@ -3,5 +3,5 @@ void NDPlugin{{ cookiecutter.plugin_name }}::createAllParams(){
     // all the parameters defined for this plugin.
 
     // Example:
-    // createParam(ND_{{ cookiecutter.plugin_name.upper() }}_EXAMPLE_PARAM, asynParamInt32, &ND_{{ cookiecutter.plugin_name.upper() }}_EXAMPLE_PARAM);
+    createParam(NDPlugin{{ cookiecutter.plugin_name }}_LogLevelString, asynParamInt32, &NDPlugin{{ cookiecutter.plugin_name }}_LogLevel);
 }
